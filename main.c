@@ -10,6 +10,8 @@
 
 #include <stdio.h>
 
+const int MAX_DATA_LENGTH = 255;
+
 int main(int argc, char* argv[]) {
 
     if (argc < 2) {
@@ -22,12 +24,26 @@ int main(int argc, char* argv[]) {
 
     } else {
 
-        printf("input argument:%s\n", argv[1]);
+        FILE *filePointer;
+        char rawFileData[MAX_DATA_LENGTH];
+        filePointer = fopen(argv[1], "r");
+
+        if(filePointer != NULL) {
+
+            while(fgets(rawFileData, MAX_DATA_LENGTH, filePointer)) {
+                printf("%s", rawFileData);
+            }
+
+        fclose(filePointer);
+
+        } else {
+
+            printf("file %s not found\n.", argv[1]);
+
+        }
 
     }
 
     return 0;
 
 }
-
-    
