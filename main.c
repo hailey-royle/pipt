@@ -14,15 +14,7 @@ const int MAX_DATA_LENGTH = 255;
 
 int main(int argc, char* argv[]) {
 
-    if (argc < 2) {
-
-        puts("no file given");
-
-    } else if (argc > 2) {
-
-        puts("too many arguments");
-
-    } else {
+    if (argc == 2) {
 
         FILE *filePointer;
         char rawFileData[MAX_DATA_LENGTH];
@@ -41,6 +33,14 @@ int main(int argc, char* argv[]) {
             printf("file %s not found\n.", argv[1]);
 
         }
+
+    } else if (argc > 2) {
+
+        puts("too many arguments");
+
+    } else if (argc < 2) {
+
+        puts("no file given");
 
     }
 
