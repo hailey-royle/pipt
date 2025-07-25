@@ -98,6 +98,11 @@ int main(int argc, char* argv[]) {
 
     }
 
+    for(int i = 0; i < MAX_ITEMS; i ++) {
+        if (piptItems[i].title[0] == '\0') { break; }
+        printf("s", piptItems[i].title);
+    }
+
     return 0;
 
 }
