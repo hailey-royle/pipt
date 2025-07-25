@@ -12,17 +12,17 @@
 
 int main(int argc, char* argv[]) {
 
-    if (argc == 1) {
+    if (argc < 2) {
 
         puts("no file given");
 
-    } else if (argc == 2) {
-
-        printf("input argument:%s\n", argv[1]);
-
-    } else if (argc >= 3) {
+    } else if (argc > 2) {
 
         puts("too many arguments");
+
+    } else {
+
+        printf("input argument:%s\n", argv[1]);
 
     }
 
