@@ -107,9 +107,23 @@ int main(int argc, char* argv[]) {
 
     }
 
-    for(int i = 0; i < MAX_ITEMS; i ++) {
-        if (piptItems[i].title[0] == '\0') { break; }
-        printf("s", piptItems[i].title);
+    for (int i = 0; i < MAX_ITEMS; i++) {
+
+        if (piptItems[i].title[0] == '\0') {
+            break;
+        }
+
+        printf("%s\n", piptItems[i].title);
+        printf("%s\n", piptItems[i].body);
+
+        for (int j = 0; j < MAX_CONNECTIONS; j++) {
+
+            if (piptItems[i].connections[j][0] == '\0') {
+                break;
+            }
+
+            printf("%s\n", piptItems[i].connections[j]);
+        }
     }
 
     return 0;
