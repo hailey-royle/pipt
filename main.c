@@ -10,20 +10,41 @@
 
 #include <stdio.h>
 
-const int MAX_DATA_LENGTH = 255;
+#define MAX_ITEM_DATA_LENGTH 64
+#define MAX_CONNECTIONS 4
+#define MAX_ITEM_LIST 16
+
+struct PiptItem {
+    char connections[MAX_CONNECTIONS][MAX_ITEM_DATA_LENGTH];
+    char title[MAX_ITEM_DATA_LENGTH];
+    char body[MAX_ITEM_DATA_LENGTH];
+};
+struct PiptItem piptItems[MAX_ITEM_LIST];
 
 int main(int argc, char* argv[]) {
 
     if (argc == 2) {
 
         FILE *filePointer;
-        char rawFileData[MAX_DATA_LENGTH];
+        char rawFileData[MAX_ITEM_DATA_LENGTH];
         filePointer = fopen(argv[1], "r");
 
         if(filePointer != NULL) {
 
-            while(fgets(rawFileData, MAX_DATA_LENGTH, filePointer)) {
+            while (fgets(rawFileData, MAX_ITEM_DATA_LENGTH, filePointer)) {
+
+                if (rawFileData[0] == '#') {
+                    //title
+                } else if (rawFileData[0] == '-') {
+                    //connection
+                } else if (rawFileData[0] == '\n') {
+                    //nothing
+                } else {
+                    //body
+                }
+
                 printf("%s", rawFileData);
+
             }
 
         fclose(filePointer);
