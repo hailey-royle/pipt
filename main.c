@@ -12,11 +12,20 @@
 
 int main(int argc, char* argv[]) {
 
-    printf("input %d arguments:\n", argc);
+    if (argc == 1) {
 
-    for (int i = 0; i < argc; i++) {
-        printf("%s\n", argv[i]);
+        puts("no file given");
+
+    } else if (argc == 2) {
+
+        printf("input argument:%s\n", argv[1]);
+
+    } else if (argc >= 3) {
+
+        puts("too many arguments");
+
     }
+
     return 0;
 
 }
