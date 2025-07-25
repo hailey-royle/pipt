@@ -10,9 +10,13 @@
 
 #include <stdio.h>
 
-#define MAX_ITEM_DATA_LENGTH 64
+#define MAX_ITEM_DATA_LENGTH 255
 #define MAX_CONNECTIONS 4
 #define MAX_ITEMS 16
+
+#define TITLE_MARKER '#'
+#define BODY_MARKER '-'
+#define CONNECTION_MARKER '>'
 
 struct PiptItem {
     char connections[MAX_CONNECTIONS][MAX_ITEM_DATA_LENGTH];
@@ -34,10 +38,13 @@ int main(int argc, char* argv[]) {
             int currentItem = -1;
             int currentItemConnection = 0;
             int currentItemBodyPosition = 0;
+            int currentLineNumber = 0;
 
             while (fgets(rawFileData, MAX_ITEM_DATA_LENGTH, filePointer)) {
 
-                if (rawFileData[0] == '#') {
+                currentLineNumber++;
+
+                if (rawFileData[0] == TITLE_MARKER) {
 
                     currentItem++;
 
@@ -51,7 +58,7 @@ int main(int argc, char* argv[]) {
                     currentItemConnection = 0;
                     currentItemBodyPosition = 0;
 
-                } else if (rawFileData[0] == '-') {
+                } else if (rawFileData[0] == CONNECTION_MARKER) {
 
                     for (int i = 0; i < MAX_ITEM_DATA_LENGTH; i++) {
                         if (rawFileData[i] == '\n') {
@@ -62,9 +69,7 @@ int main(int argc, char* argv[]) {
 
                     currentItemConnection++;
 
-                } else if (rawFileData[0] == '\n') {
-
-                } else {
+                } else if (rawFileData[0] == BODY_MARKER) {
 
                     for (int i = 0; i < MAX_ITEM_DATA_LENGTH; i++) {
                         if (rawFileData[i] == '\n') {
@@ -74,9 +79,13 @@ int main(int argc, char* argv[]) {
                         currentItemBodyPosition++;
                     }
 
-                }
+                } else if (rawFileData[0] == '\n') {
 
-                printf("%s", rawFileData);
+                } else {
+
+                    printf("data on line %d could not be prosessed, starts with %c\n", currentLineNumber, rawFileData[0]);
+
+                }
 
             }
 
