@@ -27,73 +27,73 @@ struct PiptItem piptItems[MAX_ITEMS];
 
 void LoadFile(char** path) {
 
-        FILE *filePointer;
-        filePointer = fopen(*path, "r");
-        char rawFileData[MAX_ITEM_DATA_LENGTH];
+    FILE *filePointer;
+    filePointer = fopen(*path, "r");
+    char rawFileData[MAX_ITEM_DATA_LENGTH];
 
-        if(filePointer != NULL) {
+    if(filePointer != NULL) {
 
-            int currentItem = -1;
-            int currentItemConnection = 0;
-            int currentItemBodyPosition = 0;
-            int currentLineNumber = 0;
+        int currentItem = -1;
+        int currentItemConnection = 0;
+        int currentItemBodyPosition = 0;
+        int currentLineNumber = 0;
 
-            while (fgets(rawFileData, MAX_ITEM_DATA_LENGTH, filePointer)) {
+        while (fgets(rawFileData, MAX_ITEM_DATA_LENGTH, filePointer)) {
 
-                currentLineNumber++;
+            currentLineNumber++;
 
-                if (rawFileData[0] == TITLE_MARKER) {
+            if (rawFileData[0] == TITLE_MARKER) {
 
-                    currentItem++;
+                currentItem++;
 
-                    for (int i = 0; i < MAX_ITEM_DATA_LENGTH; i++) {
-                        if (rawFileData[i] == '\n') {
-                            break;
-                        }
-                        piptItems[currentItem].title[i] = rawFileData[i];
+                for (int i = 0; i < MAX_ITEM_DATA_LENGTH; i++) {
+                    if (rawFileData[i] == '\n') {
+                        break;
                     }
-
-                    currentItemConnection = 0;
-                    currentItemBodyPosition = 0;
-
-                } else if (rawFileData[0] == CONNECTION_MARKER) {
-
-                    for (int i = 0; i < MAX_ITEM_DATA_LENGTH; i++) {
-                        if (rawFileData[i] == '\n') {
-                            break;
-                        }
-                        piptItems[currentItem].connections[currentItemConnection][i] = rawFileData[i];
-                    }
-
-                    currentItemConnection++;
-
-                } else if (rawFileData[0] == BODY_MARKER) {
-
-                    for (int i = 0; i < MAX_ITEM_DATA_LENGTH; i++) {
-                        if (rawFileData[i] == '\n') {
-                            break;
-                        }
-                        piptItems[currentItem].body[currentItemBodyPosition] = rawFileData[i];
-                        currentItemBodyPosition++;
-                    }
-
-                } else if (rawFileData[0] == '\n') {
-
-                } else {
-
-                    printf("data on line %d could not be prosessed, starts with %c\n", currentLineNumber, rawFileData[0]);
-
+                    piptItems[currentItem].title[i] = rawFileData[i];
                 }
+
+                currentItemConnection = 0;
+                currentItemBodyPosition = 0;
+
+            } else if (rawFileData[0] == CONNECTION_MARKER) {
+
+                for (int i = 0; i < MAX_ITEM_DATA_LENGTH; i++) {
+                    if (rawFileData[i] == '\n') {
+                        break;
+                    }
+                    piptItems[currentItem].connections[currentItemConnection][i] = rawFileData[i];
+                }
+
+                currentItemConnection++;
+
+            } else if (rawFileData[0] == BODY_MARKER) {
+
+                for (int i = 0; i < MAX_ITEM_DATA_LENGTH; i++) {
+                    if (rawFileData[i] == '\n') {
+                        break;
+                    }
+                    piptItems[currentItem].body[currentItemBodyPosition] = rawFileData[i];
+                    currentItemBodyPosition++;
+                }
+
+            } else if (rawFileData[0] == '\n') {
+
+            } else {
+
+                printf("data on line %d could not be prosessed, starts with %c\n", currentLineNumber, rawFileData[0]);
 
             }
 
-            fclose(filePointer);
-
-        } else {
-
-            printf("file %s not found\n.", *path);
-
         }
+
+        fclose(filePointer);
+
+    } else {
+
+        printf("file %s not found\n.", *path);
+
+    }
 }
 
 int main(int argc, char* argv[]) {
