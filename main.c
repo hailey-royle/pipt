@@ -25,12 +25,10 @@ struct PiptItem {
 };
 struct PiptItem piptItems[MAX_ITEMS];
 
-int main(int argc, char* argv[]) {
-
-    if (argc == 2) {
+void LoadFile(char** path) {
 
         FILE *filePointer;
-        filePointer = fopen(argv[1], "r");
+        filePointer = fopen(*path, "r");
         char rawFileData[MAX_ITEM_DATA_LENGTH];
 
         if(filePointer != NULL) {
@@ -93,9 +91,16 @@ int main(int argc, char* argv[]) {
 
         } else {
 
-            printf("file %s not found\n.", argv[1]);
+            printf("file %s not found\n.", *path);
 
         }
+}
+
+int main(int argc, char* argv[]) {
+
+    if (argc == 2) {
+
+        LoadFile(&argv[1]);
 
     } else if (argc > 2) {
 
