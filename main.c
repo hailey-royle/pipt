@@ -128,15 +128,19 @@ int main(int argc, char* argv[]) {
 
     for (int i = 0; i < piptItemCount; i++) {
 
-        for (int j = 0; j < MAX_CONNECTIONS; j++) {
+        for (int j = 0; j < piptItemCount; j++) {
+            piptItemMatrix[i][j] = false;
+        }
+    }
+
+    for (int i = 0; i < piptItemCount; i++) {
+
+        for (int j = 0; j < piptItemCount; j++) {
 
             for (int h = 0; h < piptItemCount; h++) {
 
                 if (streq(piptItems[i].connections[j], piptItems[h].title)) {
                     piptItemMatrix[i][h] = true;
-
-                } else {
-                    piptItemMatrix[i][h] = false;
                 }
             }
         }
@@ -144,18 +148,33 @@ int main(int argc, char* argv[]) {
 
     for (int i = 0; i < piptItemCount; i++) {
 
+        for (int j = 0; j < piptItemCount; j++) {
+
+            if (piptItemMatrix[i][j] == true) {
+                printf("y");
+
+            } else {
+                printf("n");
+            }
+        }
+        printf("\n");
+    }
+
+
+    for (int i = 0; i < piptItemCount; i++) {
+
         if (piptItems[i].title[0] == '\0') {
             break;
         }
-        printf("%s\n", piptItems[i].title);
-        printf("%s\n", piptItems[i].body);
+        printf("#:%s\n", piptItems[i].title);
+        printf("-:%s\n", piptItems[i].body);
 
         for (int j = 0; j < MAX_CONNECTIONS; j++) {
 
             if (piptItems[i].connections[j][0] == '\0') {
                 break;
             }
-            printf("%s\n", piptItems[i].connections[j]);
+            printf(">:%s\n", piptItems[i].connections[j]);
         }
     }
     return 0;
