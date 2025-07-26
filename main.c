@@ -9,6 +9,7 @@
  */
 
 #include <stdio.h>
+#include <stdbool.h>
 
 #define MAX_ITEM_DATA_LENGTH 255
 #define MAX_CONNECTIONS 4
@@ -25,13 +26,13 @@ struct PiptItem {
 };
 struct PiptItem piptItems[MAX_ITEMS];
 
-void LoadFile(char** path) {
+int LoadFile(char** path) {
 
     FILE *filePointer;
     filePointer = fopen(*path, "r");
     char rawFileData[MAX_ITEM_DATA_LENGTH];
 
-    if(filePointer != NULL) {
+    if (filePointer != NULL) {
 
         int currentItem = -1;
         int currentItemConnection = 0;
@@ -47,10 +48,10 @@ void LoadFile(char** path) {
                 currentItem++;
 
                 for (int i = 0; i < MAX_ITEM_DATA_LENGTH; i++) {
-                    if (rawFileData[i] == '\n') {
+                    if (rawFileData[i+2] == '\n') {
                         break;
                     }
-                    piptItems[currentItem].title[i] = rawFileData[i];
+                    piptItems[currentItem].title[i] = rawFileData[i+2];
                 }
 
                 currentItemConnection = 0;
@@ -59,10 +60,10 @@ void LoadFile(char** path) {
             } else if (rawFileData[0] == CONNECTION_MARKER) {
 
                 for (int i = 0; i < MAX_ITEM_DATA_LENGTH; i++) {
-                    if (rawFileData[i] == '\n') {
+                    if (rawFileData[i+2] == '\n') {
                         break;
                     }
-                    piptItems[currentItem].connections[currentItemConnection][i] = rawFileData[i];
+                    piptItems[currentItem].connections[currentItemConnection][i] = rawFileData[i+2];
                 }
 
                 currentItemConnection++;
@@ -70,10 +71,10 @@ void LoadFile(char** path) {
             } else if (rawFileData[0] == BODY_MARKER) {
 
                 for (int i = 0; i < MAX_ITEM_DATA_LENGTH; i++) {
-                    if (rawFileData[i] == '\n') {
+                    if (rawFileData[i+2] == '\n') {
                         break;
                     }
-                    piptItems[currentItem].body[currentItemBodyPosition] = rawFileData[i];
+                    piptItems[currentItem].body[currentItemBodyPosition] = rawFileData[i+2];
                     currentItemBodyPosition++;
                 }
 
@@ -87,20 +88,45 @@ void LoadFile(char** path) {
 
         }
 
-        fclose(filePointer);
+    fclose(filePointer);
+    return currentItem + 1;
 
     } else {
 
         printf("file %s not found\n.", *path);
+        return 0;
 
+    }
+}
+
+bool streq(char str1[], char str2[]) {
+
+    int i = 0;
+
+    while (str1[i] == str2[i]) {
+
+        if (str1[i] == '\0' || str2[i] == '\0') {
+            break;
+        }
+
+        i++;
+
+    }
+
+    if ( str1[i] == '\0' && str2[i] == '\0') {
+        return 1;
+    } else {
+        return 0;
     }
 }
 
 int main(int argc, char* argv[]) {
 
+    int piptItemCount;
+
     if (argc == 2) {
 
-        LoadFile(&argv[1]);
+        piptItemCount = LoadFile(&argv[1]);
 
     } else if (argc > 2) {
 
@@ -112,7 +138,24 @@ int main(int argc, char* argv[]) {
 
     }
 
-    for (int i = 0; i < MAX_ITEMS; i++) {
+    bool piptItemMatrix[piptItemCount][piptItemCount];
+
+    for (int i = 0; i < piptItemCount; i++) {
+
+        for (int j = 0; j < MAX_CONNECTIONS; j++) {
+
+            for (int h = 0; h < piptItemCount; h++) {
+
+                if (streq(piptItems[i].connections[j], piptItems[h].title)) {
+                    piptItemMatrix[i][h] = true;
+                } else {
+                    piptItemMatrix[i][h] = false;
+                }
+            }
+        }
+    }
+
+    for (int i = 0; i < piptItemCount; i++) {
 
         if (piptItems[i].title[0] == '\0') {
             break;
