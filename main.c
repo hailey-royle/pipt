@@ -2,6 +2,20 @@
 
 #define MAX_ITEM_DATA 255
 
+int VerifyArgs(const int argc) {
+    if (argc < 2) {
+        printf("no arguments given\n");
+        return -1;
+    }
+
+    if (argc > 2) {
+        printf("too many arguments\n");
+        return -1;
+    }
+
+    return 1;
+}
+
 int MakeGraph(const char* arg) {
     FILE *file;
     file = fopen(arg, "r");
@@ -21,8 +35,12 @@ int MakeGraph(const char* arg) {
 }
 
 int main(int argc, char* argv[]) {
-    int nodeCount = MakeGraph(argv[1]);
+    int argvPath = VerifyArgs(argc);
 
-    printf("%d\n", nodeCount);
+    if (argvPath > 0) {
+        int nodeCount = MakeGraph(argv[argvPath]);
+        printf("%d\n", nodeCount);
+    }
+
     return 0;
 }
