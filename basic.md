@@ -9,6 +9,7 @@
 - data is brought into pipt, where it is parsed into structs
 
 > generation
+> printing
 
 # generation
 

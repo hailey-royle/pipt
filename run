@@ -1,0 +1,7 @@
+#!/bin/bash
+
+mkdir build
+gcc -std=c99 -Wall -Werror -o build/main main.c
+./build/main $1
+rm build/main
+rmdir build

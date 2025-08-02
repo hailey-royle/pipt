@@ -18,6 +18,8 @@
 #define BODY_MARKER '-'
 #define CONNECTION_MARKER '>'
 
+int piptItemCount;
+
 struct PiptItem {
     char connections[MAX_CONNECTIONS][MAX_ITEM_DATA_LENGTH];
     char title[MAX_ITEM_DATA_LENGTH];
@@ -111,8 +113,6 @@ bool streq(char str1[], char str2[]) {
 }
 
 int main(int argc, char* argv[]) {
-
-    int piptItemCount;
 
     if (argc == 2) {
         piptItemCount = LoadFile(&argv[1]);
