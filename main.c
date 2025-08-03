@@ -146,17 +146,22 @@ int StrLen(char* str) {
 
 int LongestLine(char* str) {
     int i = 0;
-    int l = 0;
+    int currentLine = 0;
+    int longestLine = 0;
     while (str[i]) {
         i++;
-        if (str[i] == '\n' && l < i) {
-            l = i - l + 1;
+        currentLine++;
+        if (str[i] == '\n') {
+            if (longestLine < currentLine) {
+                longestLine = currentLine;
+            }
+            currentLine = 0;
         }
     }
-    if (l < i) {
-        l = i - l;
+    if (longestLine < currentLine) {
+        longestLine = currentLine;
     }
-    return l;
+    return longestLine;
 }
 
 void FormatItem(int itemNumber) {
