@@ -11,12 +11,13 @@
 #define CORRNER_CHAR "+"
 #define HORIZONTAL_CHAR "-"
 #define VERTICAL_CHAR "|"
+#define SPACE_CHAR " "
 
 struct piptItem {
     char connection[MAX_ITEM_COUNT][MAX_ITEM_TITLE];
     char title[MAX_ITEM_TITLE];
     char body[MAX_ITEM_BODY];
-    int totalTitleLength;
+    int width;
 };
 struct piptItem piptItem[MAX_ITEM_COUNT];
 
@@ -75,13 +76,28 @@ void BuildItemTitle(char* rawData, int itemNumber) {
     titleLength += StrCpy(title, CORRNER_CHAR, titleLength, 0, MAX_ITEM_TITLE - titleLength);
     titleLength += StrCpy(title, HORIZONTAL_CHAR, titleLength, 0, MAX_ITEM_TITLE - titleLength);
     titleLength += StrCpy(title, rawData, titleLength, MARK_LENGTH, MAX_ITEM_TITLE - titleLength);
-    titleLength += StrCpy(title, HORIZONTAL_CHAR, titleLength, 0, MAX_ITEM_TITLE - titleLength);
-    titleLength += StrCpy(title, CORRNER_CHAR, titleLength, 0, MAX_ITEM_TITLE - titleLength);
+
+    if (piptItem[itemNumber].width < titleLength) {
+        piptItem[itemNumber].width = titleLength;
+    }
 }
 
-void BuildItemBody(char* rawData, int itemNumber) {
+int BuildItemBody(char* rawData, int itemNumber, int bodyLength) {
+    RemoveNewLine(rawData);
+
     char* body = piptItem[itemNumber].body;
-    CopyData(rawData, body, MAX_ITEM_BODY);
+
+    if (bodyLength > 0) {
+        bodyLength += StrCpy(body, "\n", bodyLength, 0, MAX_ITEM_BODY - bodyLength);
+    }
+    bodyLength += StrCpy(body, VERTICAL_CHAR, bodyLength, 0, MAX_ITEM_BODY - bodyLength);
+    bodyLength += StrCpy(body, SPACE_CHAR, bodyLength, 0, MAX_ITEM_BODY - bodyLength);
+    bodyLength += StrCpy(body, rawData, bodyLength, MARK_LENGTH, MAX_ITEM_BODY - bodyLength);
+
+    if (piptItem[itemNumber].width < bodyLength) {
+        piptItem[itemNumber].width = bodyLength;
+    }
+    return bodyLength;
 }
 
 int LoadFileData(const char* arg) {
@@ -97,18 +113,20 @@ int LoadFileData(const char* arg) {
     int lineNumber = -1;
     int itemCount = -1;
     int connectionNumber = -1;
+    int itemBodyLength = 0;
 
     while(fgets(fileData, MAX_ITEM_DATA, file)) {
         lineNumber++;
 
         if (fileData[0] == TITLE_MARK) {
             connectionNumber = -1;
+            itemBodyLength = 0;
             itemCount++;
 
             BuildItemTitle(fileData, itemCount);
         }
         else if (fileData[0] == BODY_MARK) {
-            BuildItemBody(fileData, itemCount);
+            itemBodyLength += BuildItemBody(fileData, itemCount, itemBodyLength);
         }
         else if (fileData[0] == CONNECTION_MARK) {
             connectionNumber++;
