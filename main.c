@@ -202,6 +202,7 @@ void DrawItem(int itemNumber) {
     printf("%s\n", piptItem[itemNumber].title);
     printf("%s\n", piptItem[itemNumber].body);
     printf("%s\n", piptItem[itemNumber].bottom);
+    printf("\n");
 }
 
 
