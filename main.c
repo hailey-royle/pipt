@@ -44,9 +44,21 @@ int CopyData(char* read, char* write, const int max) {
     return -1;
 }
 
+int RemoveNewLine(char* str) {
+    int i = 0;
+    while (str[i] != '\0') {
+        if (str[i] == '\n') {
+            str[i] = '\0';
+            return 1;
+        }
+        i++;
+    }
+    return 0;
+}
+
 int StrCpy(char* writeStr, char* readStr, int writeStart, int readStart, int max) {
     for (int i = 0; i <= max; i++) {
-        if (readStr[readStart + i] == '\n' || readStr[readStart + i] == '\0') {
+        if (readStr[readStart + i] == '\0') {
             return i;
         }
         writeStr[writeStart + i] = readStr[readStart + i];
@@ -55,8 +67,10 @@ int StrCpy(char* writeStr, char* readStr, int writeStart, int readStart, int max
 }
 
 void BuildItemTitle(char* rawData, int itemNumber) {
-    int titleLength = 0;
+    RemoveNewLine(rawData);
+
     char* title = piptItem[itemNumber].title;
+    int titleLength = 0;
 
     titleLength += StrCpy(title, CORRNER_CHAR, titleLength, 0, MAX_ITEM_TITLE - titleLength);
     titleLength += StrCpy(title, HORIZONTAL_CHAR, titleLength, 0, MAX_ITEM_TITLE - titleLength);
