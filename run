@@ -1,7 +1,5 @@
 #!/bin/bash
 
-mkdir build
-gcc -std=c99 -Wall -Werror -o build/main main.c
-./build/main $1
-rm build/main
-rmdir build
+gcc -std=c99 -Wall -Werror -o main.out main.c
+./main.out $1
+rm main.out
