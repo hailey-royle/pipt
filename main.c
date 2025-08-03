@@ -63,7 +63,6 @@ int MakeGraph(const char* arg) {
             CopyData(fileData, fileDataDestination, MAX_ITEM_BODY);
         }
         else if (fileData[0] == CONNECTION_MARK) {
-            //god why
         }
         else if (fileData[0] == '\n') {
         } 
@@ -75,16 +74,18 @@ int MakeGraph(const char* arg) {
     }
 
     fclose(file);
-    return 0;
+    return itemCount;
 }
 
 int main(int argc, char* argv[]) {
     const int argvPath = VerifyArgs(argc);
 
-    if (argvPath > 0) {
-        const int nodeCount = MakeGraph(argv[argvPath]);
-        printf("%d\n", nodeCount);
+    if (argvPath < 0) {
+        return 0;
     }
+
+    const int itemCount = MakeGraph(argv[argvPath]);
+    printf("%d\n", itemCount);
 
     return 0;
 }
