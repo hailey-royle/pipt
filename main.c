@@ -150,8 +150,11 @@ int LongestLine(char* str) {
     while (str[i]) {
         i++;
         if (str[i] == '\n' && l < i) {
-            l = i;
+            l = i - l + 1;
         }
+    }
+    if (l < i) {
+        l = i - l;
     }
     return l;
 }
@@ -165,6 +168,10 @@ void FormatItem(int itemNumber) {
     width = StrLen(title);
     if (width < LongestLine(body)) {
         width = LongestLine(body);
+    }
+
+    for (int i = 0; i < width; i++) {
+        StrCpy(bottom, HORIZONTAL_CHAR, i, 0, width);
     }
 
     printf("%d\n", width);
