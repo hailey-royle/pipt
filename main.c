@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-#define MAX_ITEM_TITLE 32
-#define MAX_ITEM_BODY 128
+#define MAX_ITEM_TITLE 64
+#define MAX_ITEM_BODY 256
 #define MAX_ITEM_DATA MAX_ITEM_BODY
 #define MAX_ITEM_COUNT 16
 #define TITLE_MARK '#'
@@ -174,6 +174,14 @@ void FormatItemBottom(int itemNumber) {
     StrCpy(bottom, CORRNER_CHAR, piptItem[itemNumber].width - 1, 0, 1);
 }
 
+void FormatItemTitle(int itemNumber) {
+    char* title = piptItem[itemNumber].title;
+    for (int i = StrLen(title); i < piptItem[itemNumber].width; i++) {
+        StrCpy(title, HORIZONTAL_CHAR, i, 0, 1);
+    }
+    StrCpy(title, CORRNER_CHAR, piptItem[itemNumber].width - 1, 0, 1);
+}
+
 void FormatItem(int itemNumber) {
     char* title = piptItem[itemNumber].title;
     char* body = piptItem[itemNumber].body;
@@ -186,6 +194,7 @@ void FormatItem(int itemNumber) {
     width = width + HORIZONTAL_BUFFER;
     piptItem[itemNumber].width = width;
 
+    FormatItemTitle(itemNumber);
     FormatItemBottom(itemNumber);
 }
 
