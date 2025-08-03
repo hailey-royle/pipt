@@ -15,9 +15,10 @@
 
 struct piptItem {
     char connection[MAX_ITEM_COUNT][MAX_ITEM_TITLE];
-    char title[MAX_ITEM_TITLE];
     char rawTitle[MAX_ITEM_TITLE];
+    char title[MAX_ITEM_TITLE];
     char body[MAX_ITEM_BODY];
+    char bottom[MAX_ITEM_BODY];
     int width;
 };
 struct piptItem piptItem[MAX_ITEM_COUNT];
@@ -70,10 +71,6 @@ void FormatRawTitle(char* rawData, int itemNumber) {
     titleLength += StrCpy(title, CORRNER_CHAR, titleLength, 0, MAX_ITEM_TITLE - titleLength);
     titleLength += StrCpy(title, HORIZONTAL_CHAR, titleLength, 0, MAX_ITEM_TITLE - titleLength);
     titleLength += StrCpy(title, rawData, titleLength, MARK_LENGTH, MAX_ITEM_TITLE - titleLength);
-
-    if (piptItem[itemNumber].width < titleLength) {
-        piptItem[itemNumber].width = titleLength;
-    }
 }
 
 int FormatRawBody(char* rawData, int itemNumber, int bodyLength) {
@@ -84,13 +81,11 @@ int FormatRawBody(char* rawData, int itemNumber, int bodyLength) {
     if (bodyLength > 0) {
         bodyLength += StrCpy(body, "\n", bodyLength, 0, MAX_ITEM_BODY - bodyLength);
     }
+
     bodyLength += StrCpy(body, VERTICAL_CHAR, bodyLength, 0, MAX_ITEM_BODY - bodyLength);
     bodyLength += StrCpy(body, SPACE_CHAR, bodyLength, 0, MAX_ITEM_BODY - bodyLength);
     bodyLength += StrCpy(body, rawData, bodyLength, MARK_LENGTH, MAX_ITEM_BODY - bodyLength);
 
-    if (piptItem[itemNumber].width < bodyLength) {
-        piptItem[itemNumber].width = bodyLength;
-    }
     return bodyLength;
 }
 
@@ -142,7 +137,6 @@ int LoadFileData(const char* arg) {
 }
 
 void FormatItem(int itemNumber) {
-
 }
 
 int main(int argc, char* argv[]) {
@@ -158,7 +152,7 @@ int main(int argc, char* argv[]) {
         FormatItem(i);
         printf("%s\n", piptItem[i].title);
         printf("%s\n", piptItem[i].body);
-        printf("\n");
+        printf("%s\n", piptItem[i].bottom);
     }
 
     return 0;
