@@ -193,15 +193,6 @@ void FormatItemBottom(int itemNumber) {
     StrCpy(bottom, CORRNER_CHAR, piptItem[itemNumber].width - 1, 0, 1);
 }
 
-void FormatItemBottom(int itemNumber) {
-    char* bottom = piptItem[itemNumber].bottom;
-    for (int i = 0; i < piptItem[itemNumber].width; i++) {
-        StrCpy(bottom, HORIZONTAL_CHAR, i, 0, 1);
-    }
-    StrCpy(bottom, CORRNER_CHAR, 0, 0, 1);
-    StrCpy(bottom, CORRNER_CHAR, piptItem[itemNumber].width - 1, 0, 1);
-}
-
 void FormatItem(int itemNumber) {
     char* title = piptItem[itemNumber].title;
     char* body = piptItem[itemNumber].body;
