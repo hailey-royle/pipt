@@ -12,7 +12,7 @@ struct piptItem {
     char connection[MAX_ITEM_COUNT][MAX_ITEM_TITLE];
     char title[MAX_ITEM_TITLE];
     char body[MAX_ITEM_BODY];
-    char* connectionPointer[MAX_ITEM_COUNT];
+    int totalTitleLength;
 };
 struct piptItem piptItem[MAX_ITEM_COUNT];
 
@@ -30,13 +30,27 @@ int VerifyArgs(const int argc) {
     return 1;
 }
 
-void CopyData(char* read, char* write, const int max) {
+int CopyData(char* read, char* write, const int max) {
     for (int i = 2; i <= max; i++) {
+        if (read[i] == '\n' || read[i] == '\0') {
+            return i;
+        }
         write[i - 2] = read[i];
     }
+    return -1;
 }
 
-int MakeGraph(const char* arg) {
+void BuildItemTitle(char* rawData, int itemNumber) {
+    char* title = piptItem[itemNumber].title;
+    CopyData(rawData, title, MAX_ITEM_TITLE);
+}
+
+void BuildItemBody(char* rawData, int itemNumber) {
+    char* body = piptItem[itemNumber].body;
+    CopyData(rawData, body, MAX_ITEM_TITLE);
+}
+
+int LoadFileData(const char* arg) {
     FILE *file;
     file = fopen(arg, "r");
     char fileData[MAX_ITEM_DATA];
@@ -47,28 +61,26 @@ int MakeGraph(const char* arg) {
     }
 
     int lineNumber = -1;
-    int itemCount = 0;
+    int itemCount = -1;
     int connectionNumber = -1;
 
     while(fgets(fileData, MAX_ITEM_DATA, file)) {
         lineNumber++;
 
         if (fileData[0] == TITLE_MARK) {
-            connectionNumber = 0;
+            connectionNumber = -1;
             itemCount++;
 
-            char* fileDataDestination = piptItem[itemCount].title;
-            CopyData(fileData, fileDataDestination, MAX_ITEM_TITLE);
+            BuildItemTitle(fileData, itemCount);
         }
         else if (fileData[0] == BODY_MARK) {
-            char* fileDataDestination = piptItem[itemCount].body;
-            CopyData(fileData, fileDataDestination, MAX_ITEM_BODY);
+            BuildItemBody(fileData, itemCount);
         }
         else if (fileData[0] == CONNECTION_MARK) {
             connectionNumber++;
 
             char* fileDataDestination = piptItem[itemCount].connection[connectionNumber];
-            CopyData(fileData, fileDataDestination, MAX_ITEM_BODY);
+            CopyData(fileData, fileDataDestination, MAX_ITEM_TITLE);
         }
         else if (fileData[0] == '\n') {
         } 
@@ -80,7 +92,7 @@ int MakeGraph(const char* arg) {
     }
 
     fclose(file);
-    return itemCount;
+    return itemCount + 1;
 }
 
 int main(int argc, char* argv[]) {
@@ -90,7 +102,8 @@ int main(int argc, char* argv[]) {
         return 0;
     }
 
-    const int itemCount = MakeGraph(argv[argvPath]);
+    const int itemCount = LoadFileData(argv[argvPath]);
+
     printf("%d\n", itemCount);
 
     return 0;
