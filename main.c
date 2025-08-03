@@ -152,9 +152,7 @@ int LongestLine(char* str) {
         i++;
         currentLine++;
         if (str[i] == '\n') {
-            if (longestLine < currentLine) {
-                longestLine = currentLine;
-            }
+            if (longestLine < currentLine) {longestLine = currentLine;}
             currentLine = 0;
         }
     }
