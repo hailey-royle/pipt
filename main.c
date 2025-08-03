@@ -165,30 +165,36 @@ int LongestLine(char* str) {
     return longestLine;
 }
 
+void FormatItemBottom(int itemNumber) {
+    char* bottom = piptItem[itemNumber].bottom;
+    for (int i = 0; i < piptItem[itemNumber].width; i++) {
+        StrCpy(bottom, HORIZONTAL_CHAR, i, 0, 1);
+    }
+    StrCpy(bottom, CORRNER_CHAR, 0, 0, 1);
+    StrCpy(bottom, CORRNER_CHAR, piptItem[itemNumber].width - 1, 0, 1);
+}
+
 void FormatItem(int itemNumber) {
     char* title = piptItem[itemNumber].title;
     char* body = piptItem[itemNumber].body;
-    char* bottom = piptItem[itemNumber].bottom;
 
     int width = StrLen(title);
     int bodyLineLen = LongestLine(body);
     if (width < bodyLineLen) {
         width = bodyLineLen;
     }
-
     width = width + HORIZONTAL_BUFFER;
+    piptItem[itemNumber].width = width;
 
-    for (int i = 0; i < width; i++) {
-        StrCpy(bottom, HORIZONTAL_CHAR, i, 0, 1);
-    }
-    StrCpy(bottom, CORRNER_CHAR, 0, 0, 1);
-    StrCpy(bottom, CORRNER_CHAR, width - 1, 0, 1);
-
-    printf("%d\n", width);
-    printf("%s\n", title);
-    printf("%s\n", body);
-    printf("%s\n", bottom);
+    FormatItemBottom(itemNumber);
 }
+
+void DrawItem(int itemNumber) {
+    printf("%s\n", piptItem[itemNumber].title);
+    printf("%s\n", piptItem[itemNumber].body);
+    printf("%s\n", piptItem[itemNumber].bottom);
+}
+
 
 int main(int argc, char* argv[]) {
     const int argvPath = VerifyArgs(argc);
@@ -201,6 +207,10 @@ int main(int argc, char* argv[]) {
 
     for (int i = 0; i < itemCount; i++) {
         FormatItem(i);
+    }
+
+    for (int i = 0; i < itemCount; i++) {
+        DrawItem(i);
     }
 
     return 0;
