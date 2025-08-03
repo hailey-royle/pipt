@@ -16,6 +16,7 @@
 struct piptItem {
     char connection[MAX_ITEM_COUNT][MAX_ITEM_TITLE];
     char title[MAX_ITEM_TITLE];
+    char rawTitle[MAX_ITEM_TITLE];
     char body[MAX_ITEM_BODY];
     int width;
 };
@@ -69,6 +70,9 @@ int StrCpy(char* writeStr, char* readStr, int writeStart, int readStart, int max
 
 void BuildItemTitle(char* rawData, int itemNumber) {
     RemoveNewLine(rawData);
+
+    char* rawTitle = piptItem[itemNumber].rawTitle;
+    StrCpy(rawTitle, rawData, 0, MARK_LENGTH, MAX_ITEM_TITLE);
 
     char* title = piptItem[itemNumber].title;
     int titleLength = 0;
