@@ -58,7 +58,7 @@ int StrCpy(char* writeStr, char* readStr, int writeStart, int readStart, int max
     return -1;
 }
 
-void BuildItemTitle(char* rawData, int itemNumber) {
+void FormatRawTitle(char* rawData, int itemNumber) {
     RemoveNewLine(rawData);
 
     char* rawTitle = piptItem[itemNumber].rawTitle;
@@ -76,7 +76,7 @@ void BuildItemTitle(char* rawData, int itemNumber) {
     }
 }
 
-int BuildItemBody(char* rawData, int itemNumber, int bodyLength) {
+int FormatRawBody(char* rawData, int itemNumber, int bodyLength) {
     RemoveNewLine(rawData);
 
     char* body = piptItem[itemNumber].body;
@@ -117,10 +117,10 @@ int LoadFileData(const char* arg) {
             itemBodyLength = 0;
             itemCount++;
 
-            BuildItemTitle(rawData, itemCount);
+            FormatRawTitle(rawData, itemCount);
         }
         else if (rawData[0] == BODY_MARK) {
-            itemBodyLength += BuildItemBody(rawData, itemCount, itemBodyLength);
+            itemBodyLength += FormatRawBody(rawData, itemCount, itemBodyLength);
         }
         else if (rawData[0] == CONNECTION_MARK) {
             connectionNumber++;
@@ -141,6 +141,10 @@ int LoadFileData(const char* arg) {
     return itemCount + 1;
 }
 
+void FormatItem(int itemNumber) {
+
+}
+
 int main(int argc, char* argv[]) {
     const int argvPath = VerifyArgs(argc);
 
@@ -150,7 +154,12 @@ int main(int argc, char* argv[]) {
 
     const int itemCount = LoadFileData(argv[argvPath]);
 
-    printf("%d\n", itemCount);
+    for (int i = 0; i < itemCount; i++) {
+        FormatItem(i);
+        printf("%s\n", piptItem[i].title);
+        printf("%s\n", piptItem[i].body);
+        printf("\n");
+    }
 
     return 0;
 }
