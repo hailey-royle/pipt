@@ -7,6 +7,10 @@
 #define TITLE_MARK '#'
 #define BODY_MARK '>'
 #define CONNECTION_MARK '-'
+#define MARK_LENGTH 2
+#define CORRNER_CHAR "+"
+#define HORIZONTAL_CHAR "-"
+#define VERTICAL_CHAR "|"
 
 struct piptItem {
     char connection[MAX_ITEM_COUNT][MAX_ITEM_TITLE];
@@ -40,14 +44,30 @@ int CopyData(char* read, char* write, const int max) {
     return -1;
 }
 
+int StrCpy(char* writeStr, char* readStr, int writeStart, int readStart, int max) {
+    for (int i = 0; i <= max; i++) {
+        if (readStr[readStart + i] == '\n' || readStr[readStart + i] == '\0') {
+            return i;
+        }
+        writeStr[writeStart + i] = readStr[readStart + i];
+    }
+    return -1;
+}
+
 void BuildItemTitle(char* rawData, int itemNumber) {
+    int titlePossition = 0;
     char* title = piptItem[itemNumber].title;
-    CopyData(rawData, title, MAX_ITEM_TITLE);
+
+    titlePossition += StrCpy(title, CORRNER_CHAR, titlePossition, 0, MAX_ITEM_TITLE - titlePossition);
+    titlePossition += StrCpy(title, HORIZONTAL_CHAR, titlePossition, 0, MAX_ITEM_TITLE - titlePossition);
+    titlePossition += StrCpy(title, rawData, titlePossition, MARK_LENGTH, MAX_ITEM_TITLE - titlePossition);
+    titlePossition += StrCpy(title, HORIZONTAL_CHAR, titlePossition, 0, MAX_ITEM_TITLE - titlePossition);
+    titlePossition += StrCpy(title, CORRNER_CHAR, titlePossition, 0, MAX_ITEM_TITLE - titlePossition);
 }
 
 void BuildItemBody(char* rawData, int itemNumber) {
     char* body = piptItem[itemNumber].body;
-    CopyData(rawData, body, MAX_ITEM_TITLE);
+    CopyData(rawData, body, MAX_ITEM_BODY);
 }
 
 int LoadFileData(const char* arg) {
