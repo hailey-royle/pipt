@@ -9,10 +9,10 @@
 #define CONNECTION_MARK '-'
 
 struct piptItem {
-    char connectionPointer[MAX_ITEM_COUNT][MAX_ITEM_TITLE];
+    char connection[MAX_ITEM_COUNT][MAX_ITEM_TITLE];
     char title[MAX_ITEM_TITLE];
     char body[MAX_ITEM_BODY];
-    char* connection[MAX_ITEM_COUNT];
+    char* connectionPointer[MAX_ITEM_COUNT];
 };
 struct piptItem piptItem[MAX_ITEM_COUNT];
 
@@ -46,13 +46,15 @@ int MakeGraph(const char* arg) {
         return -1;
     }
 
-    int lineNumber = 0;
+    int lineNumber = -1;
     int itemCount = 0;
+    int connectionNumber = -1;
 
     while(fgets(fileData, MAX_ITEM_DATA, file)) {
         lineNumber++;
 
         if (fileData[0] == TITLE_MARK) {
+            connectionNumber = 0;
             itemCount++;
 
             char* fileDataDestination = piptItem[itemCount].title;
@@ -63,6 +65,10 @@ int MakeGraph(const char* arg) {
             CopyData(fileData, fileDataDestination, MAX_ITEM_BODY);
         }
         else if (fileData[0] == CONNECTION_MARK) {
+            connectionNumber++;
+
+            char* fileDataDestination = piptItem[itemCount].connection[connectionNumber];
+            CopyData(fileData, fileDataDestination, MAX_ITEM_BODY);
         }
         else if (fileData[0] == '\n') {
         } 
