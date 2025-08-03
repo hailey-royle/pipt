@@ -173,6 +173,17 @@ int LoadFileData(const char* arg) {
     return itemCount + 1;
 }
 
+void FormatItemTitle(int itemNumber) {
+    char* title = piptItem[itemNumber].title;
+    for (int i = StrLen(title); i < piptItem[itemNumber].width; i++) {
+        StrCpy(title, HORIZONTAL_CHAR, i, 0, 1);
+    }
+    StrCpy(title, CORRNER_CHAR, piptItem[itemNumber].width - 1, 0, 1);
+}
+
+void FormatItemBody(int itemNumber) {
+}
+
 void FormatItemBottom(int itemNumber) {
     char* bottom = piptItem[itemNumber].bottom;
     for (int i = 0; i < piptItem[itemNumber].width; i++) {
@@ -182,12 +193,13 @@ void FormatItemBottom(int itemNumber) {
     StrCpy(bottom, CORRNER_CHAR, piptItem[itemNumber].width - 1, 0, 1);
 }
 
-void FormatItemTitle(int itemNumber) {
-    char* title = piptItem[itemNumber].title;
-    for (int i = StrLen(title); i < piptItem[itemNumber].width; i++) {
-        StrCpy(title, HORIZONTAL_CHAR, i, 0, 1);
+void FormatItemBottom(int itemNumber) {
+    char* bottom = piptItem[itemNumber].bottom;
+    for (int i = 0; i < piptItem[itemNumber].width; i++) {
+        StrCpy(bottom, HORIZONTAL_CHAR, i, 0, 1);
     }
-    StrCpy(title, CORRNER_CHAR, piptItem[itemNumber].width - 1, 0, 1);
+    StrCpy(bottom, CORRNER_CHAR, 0, 0, 1);
+    StrCpy(bottom, CORRNER_CHAR, piptItem[itemNumber].width - 1, 0, 1);
 }
 
 void FormatItem(int itemNumber) {
@@ -203,6 +215,7 @@ void FormatItem(int itemNumber) {
     piptItem[itemNumber].width = width;
 
     FormatItemTitle(itemNumber);
+    FormatItemBody(itemNumber);
     FormatItemBottom(itemNumber);
 }
 
