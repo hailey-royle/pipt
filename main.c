@@ -12,6 +12,7 @@
 #define HORIZONTAL_CHAR "-"
 #define VERTICAL_CHAR "|"
 #define SPACE_CHAR " "
+#define HORIZONTAL_BUFFER 2
 
 struct piptItem {
     char connection[MAX_ITEM_COUNT][MAX_ITEM_TITLE];
@@ -149,12 +150,14 @@ int LongestLine(char* str) {
     int currentLine = 0;
     int longestLine = 0;
     while (str[i]) {
-        i++;
-        currentLine++;
         if (str[i] == '\n') {
             if (longestLine < currentLine) {longestLine = currentLine;}
             currentLine = 0;
+            i++;
+            continue;
         }
+        i++;
+        currentLine++;
     }
     if (longestLine < currentLine) {
         longestLine = currentLine;
@@ -169,13 +172,18 @@ void FormatItem(int itemNumber) {
     int width = 0;
 
     width = StrLen(title);
-    if (width < LongestLine(body)) {
-        width = LongestLine(body);
+    int bodyLineLen = LongestLine(body);
+    if (width < bodyLineLen) {
+        width = bodyLineLen;
     }
 
+    width = width + HORIZONTAL_BUFFER;
+
     for (int i = 0; i < width; i++) {
-        StrCpy(bottom, HORIZONTAL_CHAR, i, 0, width);
+        StrCpy(bottom, HORIZONTAL_CHAR, i, 0, 1);
     }
+    StrCpy(bottom, CORRNER_CHAR, 0, 0, 1);
+    StrCpy(bottom, CORRNER_CHAR, width - 1, 0, 1);
 
     printf("%d\n", width);
     printf("%s\n", title);
