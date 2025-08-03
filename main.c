@@ -1,14 +1,17 @@
 #include <stdio.h>
 
-#define MAX_ITEM_DATA 255
+#define MAX_ITEM_TITLE 32
+#define MAX_ITEM_BODY 128
+#define MAX_ITEM_DATA MAX_ITEM_BODY
 #define MAX_ITEM_COUNT 16
 #define TITLE_MARK '#'
 #define BODY_MARK '>'
 #define CONNECTION_MARK '-'
 
 struct piptItem {
-    char title[MAX_ITEM_DATA];
-    char body[MAX_ITEM_DATA];
+    char connectionPointer[MAX_ITEM_COUNT][MAX_ITEM_TITLE];
+    char title[MAX_ITEM_TITLE];
+    char body[MAX_ITEM_BODY];
     char* connection[MAX_ITEM_COUNT];
 };
 struct piptItem piptItem[MAX_ITEM_COUNT];
@@ -27,8 +30,8 @@ int VerifyArgs(const int argc) {
     return 1;
 }
 
-void CopyData(char* read, char* write) {
-    for (int i = 2; i <= MAX_ITEM_DATA; i++) {
+void CopyData(char* read, char* write, const int max) {
+    for (int i = 2; i <= max; i++) {
         write[i - 2] = read[i];
     }
 }
@@ -53,11 +56,11 @@ int MakeGraph(const char* arg) {
             itemCount++;
 
             char* fileDataDestination = piptItem[itemCount].title;
-            CopyData(fileData, fileDataDestination);
+            CopyData(fileData, fileDataDestination, MAX_ITEM_TITLE);
         }
         else if (fileData[0] == BODY_MARK) {
             char* fileDataDestination = piptItem[itemCount].body;
-            CopyData(fileData, fileDataDestination);
+            CopyData(fileData, fileDataDestination, MAX_ITEM_BODY);
         }
         else if (fileData[0] == CONNECTION_MARK) {
             //god why
