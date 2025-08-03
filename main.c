@@ -28,8 +28,8 @@ int VerifyArgs(const int argc) {
 }
 
 void CopyData(char* read, char* write) {
-    for (int i = 0; i <= MAX_ITEM_DATA; i++) {
-        write[i] = read[i];
+    for (int i = 2; i <= MAX_ITEM_DATA; i++) {
+        write[i - 2] = read[i];
     }
 }
 
