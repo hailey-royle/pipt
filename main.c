@@ -36,16 +36,6 @@ int VerifyArgs(const int argc) {
     return 1;
 }
 
-int CopyData(char* read, char* write, const int max) {
-    for (int i = 2; i <= max; i++) {
-        if (read[i] == '\n' || read[i] == '\0') {
-            return i;
-        }
-        write[i - 2] = read[i];
-    }
-    return -1;
-}
-
 int RemoveNewLine(char* str) {
     int i = 0;
     while (str[i] != '\0') {
@@ -107,7 +97,7 @@ int BuildItemBody(char* rawData, int itemNumber, int bodyLength) {
 int LoadFileData(const char* arg) {
     FILE *file;
     file = fopen(arg, "r");
-    char fileData[MAX_ITEM_DATA];
+    char rawData[MAX_ITEM_DATA];
 
     if (file == NULL) {
         printf("file %s not found\n", arg);
@@ -119,26 +109,26 @@ int LoadFileData(const char* arg) {
     int connectionNumber = -1;
     int itemBodyLength = 0;
 
-    while(fgets(fileData, MAX_ITEM_DATA, file)) {
+    while(fgets(rawData, MAX_ITEM_DATA, file)) {
         lineNumber++;
 
-        if (fileData[0] == TITLE_MARK) {
+        if (rawData[0] == TITLE_MARK) {
             connectionNumber = -1;
             itemBodyLength = 0;
             itemCount++;
 
-            BuildItemTitle(fileData, itemCount);
+            BuildItemTitle(rawData, itemCount);
         }
-        else if (fileData[0] == BODY_MARK) {
-            itemBodyLength += BuildItemBody(fileData, itemCount, itemBodyLength);
+        else if (rawData[0] == BODY_MARK) {
+            itemBodyLength += BuildItemBody(rawData, itemCount, itemBodyLength);
         }
-        else if (fileData[0] == CONNECTION_MARK) {
+        else if (rawData[0] == CONNECTION_MARK) {
             connectionNumber++;
 
-            char* fileDataDestination = piptItem[itemCount].connection[connectionNumber];
-            CopyData(fileData, fileDataDestination, MAX_ITEM_TITLE);
+            char* connection = piptItem[itemCount].connection[connectionNumber];
+            StrCpy(connection, rawData, 0, MARK_LENGTH, MAX_ITEM_TITLE);
         }
-        else if (fileData[0] == '\n') {
+        else if (rawData[0] == '\n') {
         } 
         else {
             printf("data on line %d could not be prosessed, must start line with %c : body, %c : body, or %c : connection\n",
