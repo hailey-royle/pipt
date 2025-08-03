@@ -55,14 +55,14 @@ int StrCpy(char* writeStr, char* readStr, int writeStart, int readStart, int max
 }
 
 void BuildItemTitle(char* rawData, int itemNumber) {
-    int titlePossition = 0;
+    int titleLength = 0;
     char* title = piptItem[itemNumber].title;
 
-    titlePossition += StrCpy(title, CORRNER_CHAR, titlePossition, 0, MAX_ITEM_TITLE - titlePossition);
-    titlePossition += StrCpy(title, HORIZONTAL_CHAR, titlePossition, 0, MAX_ITEM_TITLE - titlePossition);
-    titlePossition += StrCpy(title, rawData, titlePossition, MARK_LENGTH, MAX_ITEM_TITLE - titlePossition);
-    titlePossition += StrCpy(title, HORIZONTAL_CHAR, titlePossition, 0, MAX_ITEM_TITLE - titlePossition);
-    titlePossition += StrCpy(title, CORRNER_CHAR, titlePossition, 0, MAX_ITEM_TITLE - titlePossition);
+    titleLength += StrCpy(title, CORRNER_CHAR, titleLength, 0, MAX_ITEM_TITLE - titleLength);
+    titleLength += StrCpy(title, HORIZONTAL_CHAR, titleLength, 0, MAX_ITEM_TITLE - titleLength);
+    titleLength += StrCpy(title, rawData, titleLength, MARK_LENGTH, MAX_ITEM_TITLE - titleLength);
+    titleLength += StrCpy(title, HORIZONTAL_CHAR, titleLength, 0, MAX_ITEM_TITLE - titleLength);
+    titleLength += StrCpy(title, CORRNER_CHAR, titleLength, 0, MAX_ITEM_TITLE - titleLength);
 }
 
 void BuildItemBody(char* rawData, int itemNumber) {
