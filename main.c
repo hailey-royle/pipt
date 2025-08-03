@@ -115,7 +115,7 @@ int LoadFileData(const char* arg) {
             FormatRawTitle(rawData, itemCount);
         }
         else if (rawData[0] == BODY_MARK) {
-            itemBodyLength += FormatRawBody(rawData, itemCount, itemBodyLength);
+            itemBodyLength = FormatRawBody(rawData, itemCount, itemBodyLength);
         }
         else if (rawData[0] == CONNECTION_MARK) {
             connectionNumber++;
