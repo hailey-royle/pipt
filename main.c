@@ -169,9 +169,8 @@ void FormatItem(int itemNumber) {
     char* title = piptItem[itemNumber].title;
     char* body = piptItem[itemNumber].body;
     char* bottom = piptItem[itemNumber].bottom;
-    int width = 0;
 
-    width = StrLen(title);
+    int width = StrLen(title);
     int bodyLineLen = LongestLine(body);
     if (width < bodyLineLen) {
         width = bodyLineLen;
