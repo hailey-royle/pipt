@@ -136,7 +136,41 @@ int LoadFileData(const char* arg) {
     return itemCount + 1;
 }
 
+int StrLen(char* str) {
+    int i = 0;
+    while (str[i]) {
+        i++;
+    }
+    return i;
+}
+
+int LongestLine(char* str) {
+    int i = 0;
+    int l = 0;
+    while (str[i]) {
+        i++;
+        if (str[i] == '\n' && l < i) {
+            l = i;
+        }
+    }
+    return l;
+}
+
 void FormatItem(int itemNumber) {
+    char* title = piptItem[itemNumber].title;
+    char* body = piptItem[itemNumber].body;
+    char* bottom = piptItem[itemNumber].bottom;
+    int width = 0;
+
+    width = StrLen(title);
+    if (width < LongestLine(body)) {
+        width = LongestLine(body);
+    }
+
+    printf("%d\n", width);
+    printf("%s\n", title);
+    printf("%s\n", body);
+    printf("%s\n", bottom);
 }
 
 int main(int argc, char* argv[]) {
@@ -150,9 +184,6 @@ int main(int argc, char* argv[]) {
 
     for (int i = 0; i < itemCount; i++) {
         FormatItem(i);
-        printf("%s\n", piptItem[i].title);
-        printf("%s\n", piptItem[i].body);
-        printf("%s\n", piptItem[i].bottom);
     }
 
     return 0;
