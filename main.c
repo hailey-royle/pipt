@@ -24,19 +24,9 @@ struct piptItem {
 };
 struct piptItem piptItem[MAX_ITEM_COUNT];
 
-int VerifyArgs(const int argc) {
-    if (argc < 2) {
-        printf("no arguments given\n");
-        return -1;
-    }
-
-    if (argc > 2) {
-        printf("too many arguments\n");
-        return -1;
-    }
-
-    return 1;
-}
+//----------------------------------------------------------------
+// Utility Functions, for various string functions and other like things
+//----------------------------------------------------------------
 
 int RemoveNewLine(char* str) {
     int i = 0;
@@ -58,6 +48,52 @@ int StrCpy(char* writeStr, char* readStr, int writeStart, int readStart, int max
         writeStr[writeStart + i] = readStr[readStart + i];
     }
     return -1;
+}
+
+int StrLen(char* str) {
+    int i = 0;
+    while (str[i]) {
+        i++;
+    }
+    return i;
+}
+
+int LongestLine(char* str) {
+    int i = 0;
+    int currentLine = 0;
+    int longestLine = 0;
+    while (str[i]) {
+        if (str[i] == '\n') {
+            if (longestLine < currentLine) {longestLine = currentLine;}
+            currentLine = 0;
+            i++;
+            continue;
+        }
+        i++;
+        currentLine++;
+    }
+    if (longestLine < currentLine) {
+        longestLine = currentLine;
+    }
+    return longestLine;
+}
+
+//----------------------------------------------------------------
+// Content functions, do a specific job directly related to program functioning
+//----------------------------------------------------------------
+
+int VerifyArgs(const int argc) {
+    if (argc < 2) {
+        printf("no arguments given\n");
+        return -1;
+    }
+
+    if (argc > 2) {
+        printf("too many arguments\n");
+        return -1;
+    }
+
+    return 1;
 }
 
 void FormatRawTitle(char* rawData, int itemNumber) {
@@ -135,34 +171,6 @@ int LoadFileData(const char* arg) {
 
     fclose(file);
     return itemCount + 1;
-}
-
-int StrLen(char* str) {
-    int i = 0;
-    while (str[i]) {
-        i++;
-    }
-    return i;
-}
-
-int LongestLine(char* str) {
-    int i = 0;
-    int currentLine = 0;
-    int longestLine = 0;
-    while (str[i]) {
-        if (str[i] == '\n') {
-            if (longestLine < currentLine) {longestLine = currentLine;}
-            currentLine = 0;
-            i++;
-            continue;
-        }
-        i++;
-        currentLine++;
-    }
-    if (longestLine < currentLine) {
-        longestLine = currentLine;
-    }
-    return longestLine;
 }
 
 void FormatItemBottom(int itemNumber) {
