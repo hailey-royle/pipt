@@ -12,6 +12,7 @@
 #define HORIZONTAL_CHAR '-'
 #define VERTICAL_CHAR '|'
 #define SPACE_CHAR ' '
+#define BACKGROUND_CHAR '.'
 
 struct piptItem {
     char connection[MAX_ITEM_COUNT][MAX_ITEM_DATA];
@@ -190,10 +191,11 @@ int main(int argc, char* argv[]) {
     int canvasWidth = FindCanvasWidth(itemCount);
 
     char canvas[canvasHeight][canvasWidth + 1];
+
     for (int i = 0; i <= canvasHeight - 1; i++) {
         canvas[i][canvasWidth] = '\0';
         for (int j = 0; j <= canvasWidth - 1; j++) {
-            canvas[i][j] = '_';
+            canvas[i][j] = BACKGROUND_CHAR;
         }
     }
 
