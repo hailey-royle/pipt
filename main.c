@@ -47,11 +47,7 @@ void LoadTitle(char* rawData, const int itemCount) {
 }
 
 void LoadBody(char* rawData, const int itemCount, const int bodyNumber) {
-    rawData[0] = VERTICAL_CHAR;
-    rawData[1] = SPACE_CHAR;
-    rawData[strlen(rawData) - 1] = SPACE_CHAR;
-    strcat(piptItem[itemCount].body[bodyNumber], rawData);
-
+    strcpy(piptItem[itemCount].body[bodyNumber], rawData);
     int lineWidth = strlen(rawData);
     if (piptItem[itemCount].width < lineWidth) {
         piptItem[itemCount].width = lineWidth;
@@ -126,7 +122,9 @@ void FormatTop(const int itemNumber) {
 
 void FormatBody(const int itemNumber) {
     for (int i = 0; i <= piptItem[itemNumber].height - 2; i++) {
-        for (int j = strlen(piptItem[itemNumber].body[i]); j <= piptItem[itemNumber].width - 1; j++) {
+        piptItem[itemNumber].body[i][0] = VERTICAL_CHAR;
+        piptItem[itemNumber].body[i][1] = SPACE_CHAR;
+        for (int j = strlen(piptItem[itemNumber].body[i]) - 1; j <= piptItem[itemNumber].width - 1; j++) {
             piptItem[itemNumber].body[i][j] = SPACE_CHAR;
         }
         piptItem[itemNumber].body[i][piptItem[itemNumber].width] = VERTICAL_CHAR;
