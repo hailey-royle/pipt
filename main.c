@@ -111,7 +111,6 @@ int VerifyArgs(const int argc) {
     return 1;
 }
 
-
 int FormatRawBody(char* rawData, int itemNumber, int bodyLength) {
     RemoveNewLine(rawData);
 
@@ -138,16 +137,14 @@ int LoadFileData(const char* arg) {
         return -1;
     }
 
-    int lineNumber = -1;
+    int lineNumber = 0;
     int itemCount = -1;
-    int connectionNumber = -1;
+    int connectionNumber = 0;
     int itemBodyLength = 0;
 
     while(fgets(rawData, MAX_ITEM_DATA, file)) {
-        lineNumber++;
-
         if (rawData[0] == TITLE_MARK) {
-            connectionNumber = -1;
+            connectionNumber = 0;
             itemBodyLength = 0;
             itemCount++;
 
@@ -157,10 +154,9 @@ int LoadFileData(const char* arg) {
             itemBodyLength = FormatRawBody(rawData, itemCount, itemBodyLength);
         }
         else if (rawData[0] == CONNECTION_MARK) {
-            connectionNumber++;
-
             char* connection = piptItem[itemCount].connection[connectionNumber];
             StrCpy(connection, rawData, 0, MARK_LENGTH, MAX_ITEM_TITLE);
+            connectionNumber++;
         }
         else if (rawData[0] == '\n') {
         } 
@@ -169,6 +165,7 @@ int LoadFileData(const char* arg) {
                     lineNumber, TITLE_MARK, BODY_MARK, CONNECTION_MARK);
             return -1;
         }
+        lineNumber++;
     }
 
     fclose(file);
