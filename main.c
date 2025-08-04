@@ -69,6 +69,7 @@ int LoadFileData(const char* arg) {
             itemCount++;
             bodyNumber = 0;
             connectionNumber = 0;
+
             rawData[0] = CORRNER_CHAR;
             rawData[1] = HORIZONTAL_CHAR;
             rawData[strlen(rawData) - 1] = HORIZONTAL_CHAR;
@@ -79,6 +80,7 @@ int LoadFileData(const char* arg) {
         else if (rawData[0] == BODY_MARK) {
             rawData[0] = VERTICAL_CHAR;
             rawData[1] = SPACE_CHAR;
+            rawData[strlen(rawData) - 1] = SPACE_CHAR;
             strcat(piptItem[itemCount].body[bodyNumber], rawData);
             piptItem[itemCount].height++;
             bodyNumber++;
