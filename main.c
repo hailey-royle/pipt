@@ -102,12 +102,10 @@ int VerifyArgs(const int argc) {
         printf("no arguments given\n");
         return -1;
     }
-
-    if (argc > 2) {
+    else if (argc > 2) {
         printf("too many arguments\n");
         return -1;
     }
-
     return 1;
 }
 
