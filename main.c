@@ -128,6 +128,15 @@ void FormatTitle(const int itemNumber) {
     piptItem[itemNumber].title[piptItem[itemNumber].width] = CORRNER_CHAR;
 }
 
+void FormatBody(const int itemNumber) {
+    for (int i = 0; i <= piptItem[itemNumber].height - 2; i++) {
+        for (int j = strlen(piptItem[itemNumber].body[i]); j <= piptItem[itemNumber].width - 1; j++) {
+            piptItem[itemNumber].body[i][j] = SPACE_CHAR;
+        }
+        piptItem[itemNumber].body[i][piptItem[itemNumber].width] = VERTICAL_CHAR;
+    }
+}
+
 void FormatBottom(const int itemNumber) {
     for (int i = 1; i <= piptItem[itemNumber].width - 1; i++) {
         piptItem[itemNumber].bottom[i] = HORIZONTAL_CHAR;
@@ -137,20 +146,18 @@ void FormatBottom(const int itemNumber) {
 }
 
 void FormatItem(const int itemNumber) {
-    piptItem[itemNumber].title[piptItem[itemNumber].width] = CORRNER_CHAR;
-
     FormatTitle(itemNumber);
+    FormatBody(itemNumber);
     FormatBottom(itemNumber);
 }
 
 void DrawItem(const int itemNumber) {
-    printf("%d\n", piptItem[itemNumber].width);
-    printf("%d\n", piptItem[itemNumber].height);
     printf("%s\n", piptItem[itemNumber].title);
     for (int i = 0; i <= piptItem[itemNumber].height - 2; i++) {
         printf("%s\n", piptItem[itemNumber].body[i]);
     }
     printf("%s\n", piptItem[itemNumber].bottom);
+    printf("\n");
 }
 
 int main(int argc, char* argv[]) {
