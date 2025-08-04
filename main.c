@@ -51,6 +51,19 @@ void LoadTitle(char* rawData, const int itemCount) {
     piptItem[itemCount].height++;
 }
 
+void LoadBody(char* rawData, const int itemCount, const int bodyNumber) {
+    rawData[0] = VERTICAL_CHAR;
+    rawData[1] = SPACE_CHAR;
+    rawData[strlen(rawData) - 1] = SPACE_CHAR;
+    strcat(piptItem[itemCount].body[bodyNumber], rawData);
+
+    int lineWidth = strlen(rawData);
+    if (piptItem[itemCount].width < lineWidth) {
+        piptItem[itemCount].width = lineWidth;
+    }
+    piptItem[itemCount].height++;
+}
+
 int LoadFileData(const char* arg) {
     FILE *file;
     file = fopen(arg, "r");
@@ -82,16 +95,7 @@ int LoadFileData(const char* arg) {
             LoadTitle(rawData, itemCount);
         }
         else if (rawData[0] == BODY_MARK) {
-            rawData[0] = VERTICAL_CHAR;
-            rawData[1] = SPACE_CHAR;
-            rawData[strlen(rawData) - 1] = SPACE_CHAR;
-            strcat(piptItem[itemCount].body[bodyNumber], rawData);
-
-            int lineWidth = strlen(rawData);
-            if (piptItem[itemCount].width < lineWidth) {
-                piptItem[itemCount].width = lineWidth;
-            }
-            piptItem[itemCount].height++;
+            LoadBody(rawData, itemCount, bodyNumber);
             bodyNumber++;
         }
         else if (rawData[0] == CONNECTION_MARK) {
