@@ -65,6 +65,7 @@ int LoadFileData(const char* arg) {
             rawData[0] = CORRNER_CHAR;
             rawData[1] = HORIZONTAL_CHAR;
             strcpy(piptItem[itemCount].title, rawData);
+            piptItem[itemCount].width = strlen(rawData);
         }
         else if (rawData[0] == BODY_MARK) {
             rawData[0] = VERTICAL_CHAR;
@@ -89,7 +90,13 @@ int LoadFileData(const char* arg) {
     return itemCount + 1;
 }
 
+void FormatItem(int itemNumber) {
+    piptItem[itemNumber].title[piptItem[itemNumber].width - 1] = HORIZONTAL_CHAR;
+    piptItem[itemNumber].title[piptItem[itemNumber].width] = CORRNER_CHAR;
+}
+
 void DrawItem(int itemNumber) {
+    printf("%d\n", piptItem[itemNumber].width);
     printf("%s\n", piptItem[itemNumber].title);
     printf("%s\n", piptItem[itemNumber].body);
     printf("\n");
@@ -105,6 +112,7 @@ int main(int argc, char* argv[]) {
     const int itemCount = LoadFileData(argv[argvPath]);
 
     for (int i = 0; i < itemCount; i++) {
+        FormatItem(i);
         DrawItem(i);
     }
 
