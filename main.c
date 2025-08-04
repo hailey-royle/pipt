@@ -69,12 +69,12 @@ int LoadFileData(const char* arg) {
             bodyNumber = 0;
             connectionNumber = 0;
             strcpy(piptItem[itemCount].title, rawData);
-            piptItem[itemCount].width = strlen(rawData);
+            piptItem[itemCount].width = strlen(rawData) + 1;
             piptItem[itemCount].height++;
         }
         else if (rawData[0] == BODY_MARK) {
             strcpy(piptItem[itemCount].body[bodyNumber], rawData);
-            int lineWidth = strlen(rawData);
+            int lineWidth = strlen(rawData) + 1;
             if (piptItem[itemCount].width < lineWidth) {
                 piptItem[itemCount].width = lineWidth;
             }
@@ -101,31 +101,30 @@ void FormatTop(const int itemNumber) {
     strcpy(piptItem[itemNumber].top, piptItem[itemNumber].title);
     piptItem[itemNumber].top[0] = CORRNER_CHAR;
     piptItem[itemNumber].top[1] = HORIZONTAL_CHAR;
-    piptItem[itemNumber].top[strlen(piptItem[itemNumber].top) - 1] = HORIZONTAL_CHAR;
-    for (int i = strlen(piptItem[itemNumber].top); i <= piptItem[itemNumber].width - 1; i++) {
+    for (int i = strlen(piptItem[itemNumber].top) - 1; i <= piptItem[itemNumber].width - 2; i++) {
         piptItem[itemNumber].top[i] = HORIZONTAL_CHAR;
     }
-    piptItem[itemNumber].top[piptItem[itemNumber].width] = CORRNER_CHAR;
+    piptItem[itemNumber].top[piptItem[itemNumber].width - 1] = CORRNER_CHAR;
 }
 
 void FormatBody(const int itemNumber) {
     for (int i = 0; i <= piptItem[itemNumber].height - 2; i++) {
         piptItem[itemNumber].body[i][0] = VERTICAL_CHAR;
         piptItem[itemNumber].body[i][1] = SPACE_CHAR;
-        for (int j = strlen(piptItem[itemNumber].body[i]) - 1; j <= piptItem[itemNumber].width - 1; j++) {
+        for (int j = strlen(piptItem[itemNumber].body[i]) - 1; j <= piptItem[itemNumber].width - 2; j++) {
             piptItem[itemNumber].body[i][j] = SPACE_CHAR;
         }
-        piptItem[itemNumber].body[i][piptItem[itemNumber].width] = VERTICAL_CHAR;
+        piptItem[itemNumber].body[i][piptItem[itemNumber].width - 1] = VERTICAL_CHAR;
     }
 }
 
 void FormatBottom(const int itemNumber) {
     piptItem[itemNumber].height++;
-    for (int i = 1; i <= piptItem[itemNumber].width - 1; i++) {
+    piptItem[itemNumber].bottom[0] = CORRNER_CHAR;
+    for (int i = 1; i <= piptItem[itemNumber].width - 2; i++) {
         piptItem[itemNumber].bottom[i] = HORIZONTAL_CHAR;
     }
-    piptItem[itemNumber].bottom[0] = CORRNER_CHAR;
-    piptItem[itemNumber].bottom[piptItem[itemNumber].width] = CORRNER_CHAR;
+    piptItem[itemNumber].bottom[piptItem[itemNumber].width - 1] = CORRNER_CHAR;
 }
 
 void FormatItem(const int itemNumber) {
@@ -155,12 +154,12 @@ int FindCanvasHeight(const int itemCount) {
 
 int FindCanvasWidth(const int itemCount) {
     int canvasWidth = 1;
-    canvasWidth += piptItem[0].width + 1;
-    if (piptItem[1].width + 1 > piptItem[0].width + 1) {
-        canvasWidth = piptItem[1].width + 1;
+    canvasWidth += piptItem[0].width;
+    if (piptItem[1].width > piptItem[0].width) {
+        canvasWidth = piptItem[1].width;
     }
     for (int i = 2; i <= itemCount; i++) {
-        canvasWidth += piptItem[i].width + 1;
+        canvasWidth += piptItem[i].width;
         canvasWidth++;
     }
     canvasWidth++;
