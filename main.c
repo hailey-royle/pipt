@@ -120,6 +120,7 @@ void FormatBody(const int itemNumber) {
 }
 
 void FormatBottom(const int itemNumber) {
+    piptItem[itemNumber].height++;
     for (int i = 1; i <= piptItem[itemNumber].width - 1; i++) {
         piptItem[itemNumber].bottom[i] = HORIZONTAL_CHAR;
     }
@@ -134,8 +135,10 @@ void FormatItem(const int itemNumber) {
 }
 
 void DrawItem(const int itemNumber) {
+    printf("%d\n", piptItem[itemNumber].width);
+    printf("%d\n", piptItem[itemNumber].height);
     printf("%s\n", piptItem[itemNumber].top);
-    for (int i = 0; i <= piptItem[itemNumber].height - 2; i++) {
+    for (int i = 0; i <= piptItem[itemNumber].height - 3; i++) {
         printf("%s\n", piptItem[itemNumber].body[i]);
     }
     printf("%s\n", piptItem[itemNumber].bottom);
@@ -143,7 +146,7 @@ void DrawItem(const int itemNumber) {
 
 int FindCanvasHeight(const int itemCount) {
     int canvasHeight = 1;
-    for (int i = 0; i <= itemCount; i++) {
+    for (int i = 0; i <= itemCount - 1; i++) {
         canvasHeight += piptItem[i].height;
         canvasHeight++;
     }
@@ -151,12 +154,13 @@ int FindCanvasHeight(const int itemCount) {
 }
 
 int FindCanvasWidth(const int itemCount) {
-    int canvasWidth = piptItem[0].width;
-    if (piptItem[1].width > piptItem[0].width) {
-        canvasWidth = piptItem[1].width;
+    int canvasWidth = 1;
+    canvasWidth += piptItem[0].width + 1;
+    if (piptItem[1].width + 1 > piptItem[0].width + 1) {
+        canvasWidth = piptItem[1].width + 1;
     }
     for (int i = 2; i <= itemCount; i++) {
-        canvasWidth += piptItem[i].width;
+        canvasWidth += piptItem[i].width + 1;
         canvasWidth++;
     }
     canvasWidth++;
@@ -186,13 +190,17 @@ int main(int argc, char* argv[]) {
     int canvasHeight = FindCanvasHeight(itemCount);
     int canvasWidth = FindCanvasWidth(itemCount);
 
-/*    char canvas[canvasHeight][canvasWidth + 1];
+    char canvas[canvasHeight][canvasWidth + 1];
     for (int i = 0; i <= canvasHeight - 1; i++) {
         canvas[i][canvasWidth] = '\0';
         for (int j = 0; j <= canvasWidth - 1; j++) {
             canvas[i][j] = '_';
         }
-    }*/
+    }
+
+    for (int i = 0; i <= canvasHeight - 1; i++) {
+        printf("%s\n", canvas[i]);
+    }
 
     printf("%d\n", canvasHeight);
     printf("%d\n", canvasWidth);
