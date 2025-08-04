@@ -121,6 +121,13 @@ int LoadFileData(const char* arg) {
     return itemCount + 1;
 }
 
+void FormatTitle(const int itemNumber) {
+    for (int i = strlen(piptItem[itemNumber].title); i <= piptItem[itemNumber].width - 1; i++) {
+        piptItem[itemNumber].title[i] = HORIZONTAL_CHAR;
+    }
+    piptItem[itemNumber].title[piptItem[itemNumber].width] = CORRNER_CHAR;
+}
+
 void FormatBottom(const int itemNumber) {
     for (int i = 1; i <= piptItem[itemNumber].width - 1; i++) {
         piptItem[itemNumber].bottom[i] = HORIZONTAL_CHAR;
@@ -132,6 +139,7 @@ void FormatBottom(const int itemNumber) {
 void FormatItem(const int itemNumber) {
     piptItem[itemNumber].title[piptItem[itemNumber].width] = CORRNER_CHAR;
 
+    FormatTitle(itemNumber);
     FormatBottom(itemNumber);
 }
 
