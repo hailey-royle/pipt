@@ -9,10 +9,10 @@
 #define BODY_MARK '>'
 #define CONNECTION_MARK '-'
 #define MARK_LENGTH 2
-#define CORRNER_CHAR "+"
-#define HORIZONTAL_CHAR "-"
-#define VERTICAL_CHAR "|"
-#define SPACE_CHAR " "
+#define CORRNER_CHAR '+'
+#define HORIZONTAL_CHAR '-'
+#define VERTICAL_CHAR '|'
+#define SPACE_CHAR ' '
 #define HORIZONTAL_BUFFER 2
 
 struct piptItem {
@@ -124,20 +124,27 @@ int LoadFileData(const char* arg) {
     int connectionNumber = 0;
 
     while(fgets(rawData, MAX_ITEM_DATA, file)) {
-        if (rawData[0] == TITLE_MARK) {
+        if (rawData[0] == '\n') {
+            continue;
+        }
+        else if (rawData[0] == TITLE_MARK) {
             itemCount++;
             connectionNumber = 0;
+            rawData[0] = CORRNER_CHAR;
+            rawData[1] = HORIZONTAL_CHAR;
             strcpy(piptItem[itemCount].title, rawData);
         }
         else if (rawData[0] == BODY_MARK) {
-            strcat(piptItem[itemCount].title, rawData);
+            rawData[0] = VERTICAL_CHAR;
+            rawData[1] = SPACE_CHAR;
+            strcat(piptItem[itemCount].body, rawData);
         }
         else if (rawData[0] == CONNECTION_MARK) {
+            rawData[0] = CORRNER_CHAR;
+            rawData[1] = HORIZONTAL_CHAR;
             strcpy(piptItem[itemCount].connection[connectionNumber], rawData);
             connectionNumber++;
         }
-        else if (rawData[0] == '\n') {
-        } 
         else {
             printf("data on line %d could not be prosessed, must start line with %c : body, %c : body, or %c : connection\n",
                     lineNumber, TITLE_MARK, BODY_MARK, CONNECTION_MARK);
@@ -150,46 +157,11 @@ int LoadFileData(const char* arg) {
     return itemCount + 1;
 }
 
-void FormatItemTitle(int itemNumber) {
-    char* title = piptItem[itemNumber].title;
-    for (int i = StrLen(title); i < piptItem[itemNumber].width; i++) {
-        StrCpy(title, HORIZONTAL_CHAR, i, 0, 1);
-    }
-    StrCpy(title, CORRNER_CHAR, piptItem[itemNumber].width - 1, 0, 1);
-}
-
-void FormatItemBottom(int itemNumber) {
-    char* bottom = piptItem[itemNumber].bottom;
-    for (int i = 0; i < piptItem[itemNumber].width; i++) {
-        StrCpy(bottom, HORIZONTAL_CHAR, i, 0, 1);
-    }
-    StrCpy(bottom, CORRNER_CHAR, 0, 0, 1);
-    StrCpy(bottom, CORRNER_CHAR, piptItem[itemNumber].width - 1, 0, 1);
-}
-
-void FormatItem(int itemNumber) {
-    char* title = piptItem[itemNumber].title;
-    char* body = piptItem[itemNumber].body;
-
-    int width = StrLen(title);
-    int bodyLineLen = LongestLine(body);
-    if (width < bodyLineLen) {
-        width = bodyLineLen;
-    }
-    width = width + HORIZONTAL_BUFFER;
-    piptItem[itemNumber].width = width;
-
-    FormatItemTitle(itemNumber);
-    FormatItemBottom(itemNumber);
-}
-
 void DrawItem(int itemNumber) {
     printf("%s\n", piptItem[itemNumber].title);
     printf("%s\n", piptItem[itemNumber].body);
-    printf("%s\n", piptItem[itemNumber].bottom);
     printf("\n");
 }
-
 
 int main(int argc, char* argv[]) {
     const int argvPath = VerifyArgs(argc);
@@ -199,10 +171,6 @@ int main(int argc, char* argv[]) {
     }
 
     const int itemCount = LoadFileData(argv[argvPath]);
-
-    for (int i = 0; i < itemCount; i++) {
-        FormatItem(i);
-    }
 
     for (int i = 0; i < itemCount; i++) {
         DrawItem(i);
