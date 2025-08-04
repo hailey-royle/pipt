@@ -84,6 +84,10 @@ int LoadFileData(const char* arg) {
             rawData[strlen(rawData) - 1] = SPACE_CHAR;
             strcat(piptItem[itemCount].body[bodyNumber], rawData);
 
+            int lineWidth = strlen(rawData);
+            if (piptItem[itemCount].width < lineWidth) {
+                piptItem[itemCount].width = lineWidth;
+            }
             piptItem[itemCount].height++;
             bodyNumber++;
         }
