@@ -69,23 +69,30 @@ int LoadFileData(const char* arg) {
             itemCount++;
             bodyNumber = 0;
             connectionNumber = 0;
+
             rawData[0] = CORRNER_CHAR;
             rawData[1] = HORIZONTAL_CHAR;
+            rawData[strlen(rawData) - 1] = HORIZONTAL_CHAR;
             strcpy(piptItem[itemCount].title, rawData);
+
             piptItem[itemCount].width = strlen(rawData);
             piptItem[itemCount].height++;
         }
         else if (rawData[0] == BODY_MARK) {
             rawData[0] = VERTICAL_CHAR;
             rawData[1] = SPACE_CHAR;
+            rawData[strlen(rawData) - 1] = SPACE_CHAR;
             strcat(piptItem[itemCount].body[bodyNumber], rawData);
+
             piptItem[itemCount].height++;
             bodyNumber++;
         }
         else if (rawData[0] == CONNECTION_MARK) {
             rawData[0] = CORRNER_CHAR;
             rawData[1] = HORIZONTAL_CHAR;
+            rawData[strlen(rawData) - 1] = HORIZONTAL_CHAR;
             strcpy(piptItem[itemCount].connection[connectionNumber], rawData);
+
             connectionNumber++;
         }
         else {
@@ -101,7 +108,6 @@ int LoadFileData(const char* arg) {
 }
 
 void FormatItem(int itemNumber) {
-    piptItem[itemNumber].title[strlen(piptItem[itemNumber].title) - 1] = HORIZONTAL_CHAR;
     piptItem[itemNumber].title[piptItem[itemNumber].width] = CORRNER_CHAR;
 }
 
