@@ -141,13 +141,26 @@ void DrawItem(const int itemNumber) {
     printf("%s\n", piptItem[itemNumber].bottom);
 }
 
-int FindCanvasHeight( const int itemCount) {
+int FindCanvasHeight(const int itemCount) {
     int canvasHeight = 1;
     for (int i = 0; i <= itemCount; i++) {
         canvasHeight += piptItem[i].height;
         canvasHeight++;
     }
     return canvasHeight;
+}
+
+int FindCanvasWidth(const int itemCount) {
+    int canvasWidth = piptItem[0].width;
+    if (piptItem[1].width > piptItem[0].width) {
+        canvasWidth = piptItem[1].width;
+    }
+    for (int i = 2; i <= itemCount; i++) {
+        canvasWidth += piptItem[i].width;
+        canvasWidth++;
+    }
+    canvasWidth++;
+    return canvasWidth;
 }
 
 int main(int argc, char* argv[]) {
@@ -171,6 +184,7 @@ int main(int argc, char* argv[]) {
     }
 
     int canvasHeight = FindCanvasHeight(itemCount);
+    int canvasWidth = FindCanvasWidth(itemCount);
 
 /*    char canvas[canvasHeight][canvasWidth + 1];
     for (int i = 0; i <= canvasHeight - 1; i++) {
@@ -181,6 +195,7 @@ int main(int argc, char* argv[]) {
     }*/
 
     printf("%d\n", canvasHeight);
+    printf("%d\n", canvasWidth);
 
     return 0;
 }
