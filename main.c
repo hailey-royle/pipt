@@ -16,6 +16,7 @@
 struct piptItem {
     char connection[MAX_ITEM_COUNT][MAX_ITEM_DATA];
     char title[MAX_ITEM_DATA];
+    char top[MAX_ITEM_DATA];
     char body[MAX_ITEM_COUNT][MAX_ITEM_DATA];
     char bottom[MAX_ITEM_DATA];
     int width;
@@ -40,11 +41,7 @@ int VerifyArgs(const int argc) {
 }
 
 void LoadTitle(char* rawData, const int itemCount) {
-    rawData[0] = CORRNER_CHAR;
-    rawData[1] = HORIZONTAL_CHAR;
-    rawData[strlen(rawData) - 1] = HORIZONTAL_CHAR;
     strcpy(piptItem[itemCount].title, rawData);
-
     piptItem[itemCount].width = strlen(rawData);
     piptItem[itemCount].height++;
 }
@@ -63,9 +60,6 @@ void LoadBody(char* rawData, const int itemCount, const int bodyNumber) {
 }
 
 void LoadConnection(char* rawData, const int itemCount, const int connectionNumber) {
-    rawData[0] = CORRNER_CHAR;
-    rawData[1] = HORIZONTAL_CHAR;
-    rawData[strlen(rawData) - 1] = HORIZONTAL_CHAR;
     strcpy(piptItem[itemCount].connection[connectionNumber], rawData);
 }
 
@@ -119,11 +113,15 @@ int LoadFileData(const char* arg) {
     return itemCount + 1;
 }
 
-void FormatTitle(const int itemNumber) {
-    for (int i = strlen(piptItem[itemNumber].title); i <= piptItem[itemNumber].width - 1; i++) {
-        piptItem[itemNumber].title[i] = HORIZONTAL_CHAR;
+void FormatTop(const int itemNumber) {
+    strcpy(piptItem[itemNumber].top, piptItem[itemNumber].title);
+    piptItem[itemNumber].top[0] = CORRNER_CHAR;
+    piptItem[itemNumber].top[1] = HORIZONTAL_CHAR;
+    piptItem[itemNumber].top[strlen(piptItem[itemNumber].top) - 1] = HORIZONTAL_CHAR;
+    for (int i = strlen(piptItem[itemNumber].top); i <= piptItem[itemNumber].width - 1; i++) {
+        piptItem[itemNumber].top[i] = HORIZONTAL_CHAR;
     }
-    piptItem[itemNumber].title[piptItem[itemNumber].width] = CORRNER_CHAR;
+    piptItem[itemNumber].top[piptItem[itemNumber].width] = CORRNER_CHAR;
 }
 
 void FormatBody(const int itemNumber) {
@@ -144,13 +142,13 @@ void FormatBottom(const int itemNumber) {
 }
 
 void FormatItem(const int itemNumber) {
-    FormatTitle(itemNumber);
+    FormatTop(itemNumber);
     FormatBody(itemNumber);
     FormatBottom(itemNumber);
 }
 
 void DrawItem(const int itemNumber) {
-    printf("%s\n", piptItem[itemNumber].title);
+    printf("%s\n", piptItem[itemNumber].top);
     for (int i = 0; i <= piptItem[itemNumber].height - 2; i++) {
         printf("%s\n", piptItem[itemNumber].body[i]);
     }
