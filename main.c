@@ -121,19 +121,28 @@ int LoadFileData(const char* arg) {
     return itemCount + 1;
 }
 
-void FormatItem(int itemNumber) {
-    piptItem[itemNumber].title[piptItem[itemNumber].width] = CORRNER_CHAR;
+void FormatBottom(const int itemNumber) {
+    for (int i = 1; i <= piptItem[itemNumber].width - 1; i++) {
+        piptItem[itemNumber].bottom[i] = HORIZONTAL_CHAR;
+    }
+    piptItem[itemNumber].bottom[0] = CORRNER_CHAR;
+    piptItem[itemNumber].bottom[piptItem[itemNumber].width] = CORRNER_CHAR;
 }
 
-void DrawItem(int itemNumber) {
+void FormatItem(const int itemNumber) {
+    piptItem[itemNumber].title[piptItem[itemNumber].width] = CORRNER_CHAR;
+
+    FormatBottom(itemNumber);
+}
+
+void DrawItem(const int itemNumber) {
     printf("%d\n", piptItem[itemNumber].width);
     printf("%d\n", piptItem[itemNumber].height);
     printf("%s\n", piptItem[itemNumber].title);
-    for (int i = 0; i < piptItem[itemNumber].height; i++) {
+    for (int i = 0; i <= piptItem[itemNumber].height - 2; i++) {
         printf("%s\n", piptItem[itemNumber].body[i]);
     }
-
-    printf("\n");
+    printf("%s\n", piptItem[itemNumber].bottom);
 }
 
 int main(int argc, char* argv[]) {
