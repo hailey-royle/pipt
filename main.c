@@ -40,25 +40,6 @@ int VerifyArgs(const int argc) {
     return 1;
 }
 
-void LoadTitle(char* rawData, const int itemCount) {
-    strcpy(piptItem[itemCount].title, rawData);
-    piptItem[itemCount].width = strlen(rawData);
-    piptItem[itemCount].height++;
-}
-
-void LoadBody(char* rawData, const int itemCount, const int bodyNumber) {
-    strcpy(piptItem[itemCount].body[bodyNumber], rawData);
-    int lineWidth = strlen(rawData);
-    if (piptItem[itemCount].width < lineWidth) {
-        piptItem[itemCount].width = lineWidth;
-    }
-    piptItem[itemCount].height++;
-}
-
-void LoadConnection(char* rawData, const int itemCount, const int connectionNumber) {
-    strcpy(piptItem[itemCount].connection[connectionNumber], rawData);
-}
-
 int LoadFileData(const char* arg) {
     FILE *file;
     file = fopen(arg, "r");
@@ -87,14 +68,21 @@ int LoadFileData(const char* arg) {
             itemCount++;
             bodyNumber = 0;
             connectionNumber = 0;
-            LoadTitle(rawData, itemCount);
+            strcpy(piptItem[itemCount].title, rawData);
+            piptItem[itemCount].width = strlen(rawData);
+            piptItem[itemCount].height++;
         }
         else if (rawData[0] == BODY_MARK) {
-            LoadBody(rawData, itemCount, bodyNumber);
+            strcpy(piptItem[itemCount].body[bodyNumber], rawData);
+            int lineWidth = strlen(rawData);
+            if (piptItem[itemCount].width < lineWidth) {
+                piptItem[itemCount].width = lineWidth;
+            }
+            piptItem[itemCount].height++;
             bodyNumber++;
         }
         else if (rawData[0] == CONNECTION_MARK) {
-            LoadConnection(rawData, itemCount, connectionNumber);
+            strcpy(piptItem[itemCount].connection[connectionNumber], rawData);
             connectionNumber++;
         }
         else {
