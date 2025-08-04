@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 #define MAX_ITEM_TITLE 64
 #define MAX_ITEM_BODY 256
@@ -48,14 +49,6 @@ int StrCpy(char* writeStr, char* readStr, int writeStart, int readStart, int max
         writeStr[writeStart + i] = readStr[readStart + i];
     }
     return -1;
-}
-
-int StrLen(char* str) {
-    int i = 0;
-    while (str[i]) {
-        i++;
-    }
-    return i;
 }
 
 int StrNln(char* str, int start) {
@@ -189,27 +182,10 @@ int LoadFileData(const char* arg) {
 
 void FormatItemTitle(int itemNumber) {
     char* title = piptItem[itemNumber].title;
-    for (int i = StrLen(title); i < piptItem[itemNumber].width; i++) {
+    for (int i = strlen(title); i < piptItem[itemNumber].width; i++) {
         StrCpy(title, HORIZONTAL_CHAR, i, 0, 1);
     }
     StrCpy(title, CORRNER_CHAR, piptItem[itemNumber].width - 1, 0, 1);
-}
-
-void FormatItemBody(int itemNumber) {
-    char* body = piptItem[itemNumber].body;
-    char tempBody[MAX_ITEM_BODY];
-    for (int i = 0; i < MAX_ITEM_BODY; i++) {
-        tempBody[i] = '\0';
-    }
-    int bodyLine = StrNln(body, 0) - 1;
-
-    StrCpy(tempBody, body, 0, 0, bodyLine);
-    for (int i = StrLen(tempBody); i < piptItem[itemNumber].width; i++) {
-        StrCpy(tempBody, SPACE_CHAR, i, 0, 1);
-    }
-    StrCpy(tempBody, VERTICAL_CHAR, piptItem[itemNumber].width - 1, 0, 1);
-
-    printf("\n%sDONE\n\n", tempBody);
 }
 
 void FormatItemBottom(int itemNumber) {
@@ -225,7 +201,7 @@ void FormatItem(int itemNumber) {
     char* title = piptItem[itemNumber].title;
     char* body = piptItem[itemNumber].body;
 
-    int width = StrLen(title);
+    int width = strlen(title);
     int bodyLineLen = LongestLine(body);
     if (width < bodyLineLen) {
         width = bodyLineLen;
@@ -234,7 +210,6 @@ void FormatItem(int itemNumber) {
     piptItem[itemNumber].width = width;
 
     FormatItemTitle(itemNumber);
-    FormatItemBody(itemNumber);
     FormatItemBottom(itemNumber);
 }
 
