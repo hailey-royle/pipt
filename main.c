@@ -41,6 +41,16 @@ int VerifyArgs(const int argc) {
     return 1;
 }
 
+void LoadTitle(char* rawData, const int itemCount) {
+    rawData[0] = CORRNER_CHAR;
+    rawData[1] = HORIZONTAL_CHAR;
+    rawData[strlen(rawData) - 1] = HORIZONTAL_CHAR;
+    strcpy(piptItem[itemCount].title, rawData);
+
+    piptItem[itemCount].width = strlen(rawData);
+    piptItem[itemCount].height++;
+}
+
 int LoadFileData(const char* arg) {
     FILE *file;
     file = fopen(arg, "r");
@@ -69,14 +79,7 @@ int LoadFileData(const char* arg) {
             itemCount++;
             bodyNumber = 0;
             connectionNumber = 0;
-
-            rawData[0] = CORRNER_CHAR;
-            rawData[1] = HORIZONTAL_CHAR;
-            rawData[strlen(rawData) - 1] = HORIZONTAL_CHAR;
-            strcpy(piptItem[itemCount].title, rawData);
-
-            piptItem[itemCount].width = strlen(rawData);
-            piptItem[itemCount].height++;
+            LoadTitle(rawData, itemCount);
         }
         else if (rawData[0] == BODY_MARK) {
             rawData[0] = VERTICAL_CHAR;
