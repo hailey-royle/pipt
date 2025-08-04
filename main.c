@@ -8,12 +8,10 @@
 #define TITLE_MARK '#'
 #define BODY_MARK '>'
 #define CONNECTION_MARK '-'
-#define MARK_LENGTH 2
 #define CORRNER_CHAR '+'
 #define HORIZONTAL_CHAR '-'
 #define VERTICAL_CHAR '|'
 #define SPACE_CHAR ' '
-#define HORIZONTAL_BUFFER 2
 
 struct piptItem {
     char connection[MAX_ITEM_COUNT][MAX_ITEM_DATA];
