@@ -133,8 +133,7 @@ int LoadFileData(const char* arg) {
             strcat(piptItem[itemCount].title, rawData);
         }
         else if (rawData[0] == CONNECTION_MARK) {
-            char* connection = piptItem[itemCount].connection[connectionNumber];
-            StrCpy(connection, rawData, 0, MARK_LENGTH, MAX_ITEM_TITLE);
+            strcpy(piptItem[itemCount].connection[connectionNumber], rawData);
             connectionNumber++;
         }
         else if (rawData[0] == '\n') {
