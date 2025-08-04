@@ -51,12 +51,12 @@ int LoadFileData(const char* arg) {
         return -1;
     }
 
-    int lineNumber = 0;
     int itemCount = -1;
-    int bodyNumber = 0;
-    int connectionNumber = 0;
 
     while(fgets(rawData, MAX_ITEM_DATA, file)) {
+        static int lineNumber = 0;
+        static int bodyNumber = 0;
+        static int connectionNumber = 0;
         lineNumber++;
         if (strlen(rawData) >= MAX_ITEM_DATA - 1) {
             printf("data overflow on line %d\n", lineNumber);
@@ -65,7 +65,7 @@ int LoadFileData(const char* arg) {
         if (rawData[0] == '\n') {
             continue;
         }
-        else if (rawData[0] == TITLE_MARK) {
+        if (rawData[0] == TITLE_MARK) {
             itemCount++;
             bodyNumber = 0;
             connectionNumber = 0;
