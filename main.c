@@ -64,6 +64,13 @@ void LoadBody(char* rawData, const int itemCount, const int bodyNumber) {
     piptItem[itemCount].height++;
 }
 
+void LoadConnection(char* rawData, const int itemCount, const int connectionNumber) {
+    rawData[0] = CORRNER_CHAR;
+    rawData[1] = HORIZONTAL_CHAR;
+    rawData[strlen(rawData) - 1] = HORIZONTAL_CHAR;
+    strcpy(piptItem[itemCount].connection[connectionNumber], rawData);
+}
+
 int LoadFileData(const char* arg) {
     FILE *file;
     file = fopen(arg, "r");
@@ -99,11 +106,7 @@ int LoadFileData(const char* arg) {
             bodyNumber++;
         }
         else if (rawData[0] == CONNECTION_MARK) {
-            rawData[0] = CORRNER_CHAR;
-            rawData[1] = HORIZONTAL_CHAR;
-            rawData[strlen(rawData) - 1] = HORIZONTAL_CHAR;
-            strcpy(piptItem[itemCount].connection[connectionNumber], rawData);
-
+            LoadConnection(rawData, itemCount, connectionNumber);
             connectionNumber++;
         }
         else {
