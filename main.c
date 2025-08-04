@@ -58,6 +58,20 @@ int StrLen(char* str) {
     return i;
 }
 
+int StrNln(char* str, int start) {
+    if (str[start] == '\0') {
+        return 0;
+    }
+    int i = start;
+    while (str[i]) {
+        if (str[i] == '\n' || str[i] == '\0') {
+            break;
+        }
+        i++;
+    }
+    return i;
+}
+
 int LongestLine(char* str) {
     int i = 0;
     int currentLine = 0;
@@ -182,6 +196,20 @@ void FormatItemTitle(int itemNumber) {
 }
 
 void FormatItemBody(int itemNumber) {
+    char* body = piptItem[itemNumber].body;
+    char tempBody[MAX_ITEM_BODY];
+    for (int i = 0; i < MAX_ITEM_BODY; i++) {
+        tempBody[i] = '\0';
+    }
+    int bodyLine = StrNln(body, 0) - 1;
+
+    StrCpy(tempBody, body, 0, 0, bodyLine);
+    for (int i = StrLen(tempBody); i < piptItem[itemNumber].width; i++) {
+        StrCpy(tempBody, SPACE_CHAR, i, 0, 1);
+    }
+    StrCpy(tempBody, VERTICAL_CHAR, piptItem[itemNumber].width - 1, 0, 1);
+
+    printf("\n%sDONE\n\n", tempBody);
 }
 
 void FormatItemBottom(int itemNumber) {
