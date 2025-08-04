@@ -155,17 +155,22 @@ void DrawItem(const int itemNumber) {
         printf("%s\n", piptItem[itemNumber].body[i]);
     }
     printf("%s\n", piptItem[itemNumber].bottom);
-    printf("\n");
 }
 
 int main(int argc, char* argv[]) {
     const int argvPath = VerifyArgs(argc);
 
-    if (argvPath < 0) {
+    if (argvPath != 1) {
+        printf("argv failure\n");
         return 0;
     }
 
     const int itemCount = LoadFileData(argv[argvPath]);
+
+    if (itemCount < 1) {
+        printf("file %s does not have any data\n", argv[argvPath]);
+        return 0;
+    }
 
     for (int i = 0; i < itemCount; i++) {
         FormatItem(i);
