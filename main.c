@@ -51,6 +51,14 @@ int StrCpy(char* writeStr, char* readStr, int writeStart, int readStart, int max
     return -1;
 }
 
+int StrLen(char* str) {
+    int i = 0;
+    while (str[i]) {
+        i++;
+    }
+    return i;
+}
+
 int StrNln(char* str, int start) {
     if (str[start] == '\0') {
         return 0;
@@ -103,19 +111,6 @@ int VerifyArgs(const int argc) {
     return 1;
 }
 
-void FormatRawTitle(char* rawData, int itemNumber) {
-    RemoveNewLine(rawData);
-
-    char* rawTitle = piptItem[itemNumber].rawTitle;
-    StrCpy(rawTitle, rawData, 0, MARK_LENGTH, MAX_ITEM_TITLE);
-
-    char* title = piptItem[itemNumber].title;
-    int titleLength = 0;
-
-    titleLength += StrCpy(title, CORRNER_CHAR, titleLength, 0, MAX_ITEM_TITLE - titleLength);
-    titleLength += StrCpy(title, HORIZONTAL_CHAR, titleLength, 0, MAX_ITEM_TITLE - titleLength);
-    titleLength += StrCpy(title, rawData, titleLength, MARK_LENGTH, MAX_ITEM_TITLE - titleLength);
-}
 
 int FormatRawBody(char* rawData, int itemNumber, int bodyLength) {
     RemoveNewLine(rawData);
@@ -156,7 +151,7 @@ int LoadFileData(const char* arg) {
             itemBodyLength = 0;
             itemCount++;
 
-            FormatRawTitle(rawData, itemCount);
+            strcpy(piptItem[itemCount].title, rawData);
         }
         else if (rawData[0] == BODY_MARK) {
             itemBodyLength = FormatRawBody(rawData, itemCount, itemBodyLength);
@@ -182,7 +177,7 @@ int LoadFileData(const char* arg) {
 
 void FormatItemTitle(int itemNumber) {
     char* title = piptItem[itemNumber].title;
-    for (int i = strlen(title); i < piptItem[itemNumber].width; i++) {
+    for (int i = StrLen(title); i < piptItem[itemNumber].width; i++) {
         StrCpy(title, HORIZONTAL_CHAR, i, 0, 1);
     }
     StrCpy(title, CORRNER_CHAR, piptItem[itemNumber].width - 1, 0, 1);
@@ -201,7 +196,7 @@ void FormatItem(int itemNumber) {
     char* title = piptItem[itemNumber].title;
     char* body = piptItem[itemNumber].body;
 
-    int width = strlen(title);
+    int width = StrLen(title);
     int bodyLineLen = LongestLine(body);
     if (width < bodyLineLen) {
         width = bodyLineLen;
