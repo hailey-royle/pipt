@@ -170,6 +170,16 @@ void DrawItem(const int itemNumber) {
     printf("%s\n", piptItem[itemNumber].bottom);
 }
 
+void InitCanvas(char* canvas, const int canvasHeight, const int canvasWidth) {
+    for (int i = 0; i < canvasHeight * canvasWidth; i++) {
+        canvas[i] = BACKGROUND_CHAR;
+    }
+    for (int i = canvasWidth - 1; i < canvasHeight * canvasWidth; i += canvasWidth) {
+        canvas[i] = '\n';
+    }
+    canvas[(canvasHeight * canvasWidth) - 1] = '\0';
+}
+
 int main(int argc, char* argv[]) {
     const int argvPath = VerifyArgs(argc);
 
@@ -191,22 +201,14 @@ int main(int argc, char* argv[]) {
 
     int canvasHeight = FindCanvasHeight(itemCount);
     int canvasWidth = FindCanvasWidth(itemCount);
-    int canvasSize = canvasHeight * (canvasWidth + 1);
+    canvasWidth++;
 
-    char canvas[canvasSize];
-
-    for (int i = 0; i < canvasSize; i++) {
-        canvas[i] = BACKGROUND_CHAR;
-    }
-    for (int i = 0; i <= canvasSize; i += (canvasWidth + 1)) {
-        canvas[i - 1] = '\n';
-    }
+    char canvas[canvasHeight * canvasWidth];
+    InitCanvas(canvas, canvasHeight, canvasWidth);
 
     for (int i = 0; i < itemCount; i++) {
         DrawItem(i);
     }
-
-    printf("%s", canvas);
 
     return 0;
 }
