@@ -169,7 +169,6 @@ void DrawItem(char* canvas, const int canvasHeight, const int canvasWidth, const
     piptItem[itemNumber].x = 1;
     piptItem[itemNumber].y = 1;
 
-
     for (int i = 0; i < piptItem[itemNumber].height; i++) {
         if (i == 0) {
             for (int j = 0; j <= piptItem[itemNumber].width - 1; j++) {
@@ -187,12 +186,6 @@ void DrawItem(char* canvas, const int canvasHeight, const int canvasWidth, const
             }
         }
     }
-
-    printf("%s\n", piptItem[itemNumber].top);
-    for (int i = 0; i <= piptItem[itemNumber].height - 3; i++) {
-        printf("%s\n", piptItem[itemNumber].body[i]);
-    }
-    printf("%s\n", piptItem[itemNumber].bottom);
 }
 
 int main(int argc, char* argv[]) {
