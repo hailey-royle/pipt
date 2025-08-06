@@ -159,17 +159,6 @@ int FindCanvasWidth(const int itemCount) {
     return canvasWidth;
 }
 
-void DrawItem(const int itemNumber) {
-    piptItem[itemNumber].x = 1;
-    piptItem[itemNumber].y = 1;
-
-    printf("%s\n", piptItem[itemNumber].top);
-    for (int i = 0; i <= piptItem[itemNumber].height - 3; i++) {
-        printf("%s\n", piptItem[itemNumber].body[i]);
-    }
-    printf("%s\n", piptItem[itemNumber].bottom);
-}
-
 void InitCanvas(char* canvas, const int canvasHeight, const int canvasWidth) {
     for (int i = 0; i < canvasHeight * canvasWidth; i++) {
         canvas[i] = BACKGROUND_CHAR;
@@ -178,6 +167,26 @@ void InitCanvas(char* canvas, const int canvasHeight, const int canvasWidth) {
         canvas[i] = '\n';
     }
     canvas[(canvasHeight * canvasWidth) - 1] = '\0';
+}
+
+void DrawItem(char* canvas, const int canvasHeight, const int canvasWidth, const int itemNumber) {
+    piptItem[itemNumber].x = 1;
+    piptItem[itemNumber].y = 1;
+
+
+    for (int i = 0; i <= piptItem[itemNumber].height; i++) {
+        if (i == 0) {
+            for (int j = 0; j <= piptItem[itemNumber].width - 1; j++) {
+                canvas[((piptItem[itemNumber].y * canvasWidth) + piptItem[itemNumber].x) + j] = piptItem[itemNumber].top[j];
+            }
+        }
+    }
+
+    printf("%s\n", piptItem[itemNumber].top);
+    for (int i = 0; i <= piptItem[itemNumber].height - 3; i++) {
+        printf("%s\n", piptItem[itemNumber].body[i]);
+    }
+    printf("%s\n", piptItem[itemNumber].bottom);
 }
 
 int main(int argc, char* argv[]) {
@@ -207,8 +216,10 @@ int main(int argc, char* argv[]) {
     InitCanvas(canvas, canvasHeight, canvasWidth);
 
     for (int i = 0; i < itemCount; i++) {
-        DrawItem(i);
+        DrawItem(canvas, canvasHeight, canvasWidth, i);
     }
+
+    printf("%s\n", canvas);
 
     return 0;
 }
