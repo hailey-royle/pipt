@@ -176,9 +176,14 @@ void DrawItem(char* canvas, const int canvasHeight, const int canvasWidth, const
                 canvas[((piptItem[itemNumber].y * canvasWidth) + piptItem[itemNumber].x) + j] = piptItem[itemNumber].top[j];
             }
         }
-        if (i == piptItem[itemNumber].height - 1) {
+        else if (i == piptItem[itemNumber].height - 1) {
             for (int j = 0; j <= piptItem[itemNumber].width - 1; j++) {
                 canvas[(((piptItem[itemNumber].y + i) * canvasWidth) + piptItem[itemNumber].x) + j] = piptItem[itemNumber].bottom[j];
+            }
+        }
+        else {
+            for (int j = 0; j <= piptItem[itemNumber].width - 1; j++) {
+                canvas[(((piptItem[itemNumber].y + i) * canvasWidth) + piptItem[itemNumber].x) + j] = piptItem[itemNumber].body[i - 1][j];
             }
         }
     }
