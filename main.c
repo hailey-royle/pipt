@@ -174,10 +174,15 @@ void DrawItem(char* canvas, const int canvasHeight, const int canvasWidth, const
     piptItem[itemNumber].y = 1;
 
 
-    for (int i = 0; i <= piptItem[itemNumber].height; i++) {
+    for (int i = 0; i < piptItem[itemNumber].height; i++) {
         if (i == 0) {
             for (int j = 0; j <= piptItem[itemNumber].width - 1; j++) {
                 canvas[((piptItem[itemNumber].y * canvasWidth) + piptItem[itemNumber].x) + j] = piptItem[itemNumber].top[j];
+            }
+        }
+        if (i == piptItem[itemNumber].height - 1) {
+            for (int j = 0; j <= piptItem[itemNumber].width - 1; j++) {
+                canvas[(((piptItem[itemNumber].y + i) * canvasWidth) + piptItem[itemNumber].x) + j] = piptItem[itemNumber].bottom[j];
             }
         }
     }
