@@ -27,10 +27,6 @@ struct piptItem {
 };
 struct piptItem piptItem[MAX_ITEM_COUNT];
 
-//----------------------------------------------------------------
-// Content functions, do a specific job directly related to program functioning
-//----------------------------------------------------------------
-
 int VerifyArgs(const int argc) {
     if (argc < 2) {
         printf("no arguments given\n");
