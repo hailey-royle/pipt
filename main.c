@@ -216,10 +216,9 @@ void PlaceItem(char* canvas, int itemNumber, int canvasWidth) {
             printf("connection not found for %s", piptItem[itemNumber].connection[i]);
         }
 
-        PushItem(1, piptItem[itemNumber].height + 2, piptItem[itemNumber].y);
+        PushItem(connectionItem, piptItem[itemNumber].height + 2, piptItem[itemNumber].y);
+        PlaceItem(canvas, connectionItem, canvasWidth);
     }
-    //for connections
-    //PlaceItem(canvas, itemNumber, canvasWidth);
 }
 
 int main(int argc, char* argv[]) {
@@ -247,7 +246,6 @@ int main(int argc, char* argv[]) {
 
     PushItem(0, 1, 1);
     PlaceItem(canvas, 0, canvasWidth);
-    PlaceItem(canvas, 1, canvasWidth);
 
     printf("%s\n", canvas);
 
