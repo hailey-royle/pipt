@@ -195,7 +195,7 @@ int FindConnection(int itemNumber, int connectionNumber) {
             return i;
         }
     }
-    return -2;
+    return -1;
 }
 
 void PushItem(int itemNumber, int yPush, int xPush) {
@@ -204,18 +204,16 @@ void PushItem(int itemNumber, int yPush, int xPush) {
 }
 
 void PlaceItem(char* canvas, int itemNumber, int canvasWidth) {
-    if (piptItem[itemNumber].x == 0) {
-        piptItem[itemNumber].x = 1;
-        piptItem[itemNumber].y = 1;
-    }
-
     DrawItem(canvas, itemNumber, canvasWidth);
 
     for (int i = 0; i < MAX_ITEM_COUNT; i++) {
         if (piptItem[itemNumber].connection[i][0] == '\0') {
-            continue;
+            break;
         }
         int connectionItem = FindConnection(itemNumber, i);
+        if (connectionItem == -1) {
+            printf("connection not found for %s", piptItem[itemNumber].connection[i]);
+        }
         printf("coni:%d\n", connectionItem);
     }
     //for connections
