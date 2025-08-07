@@ -165,12 +165,7 @@ void InitCanvas(char* canvas, const int canvasHeight, const int canvasWidth) {
     canvas[(canvasHeight * canvasWidth) - 1] = '\0';
 }
 
-void DrawItem(char* canvas, const int canvasHeight, const int canvasWidth, const int itemNumber) {
-    static int x = 1;
-    static int y = 1;
-    piptItem[itemNumber].x = x;
-    piptItem[itemNumber].y = y;
-
+void DrawItem(char* canvas, int itemNumber, int canvasWidth) {
     for (int i = 0; i < piptItem[itemNumber].height; i++) {
         if (i == 0) {
             for (int j = 0; j <= piptItem[itemNumber].width - 1; j++) {
@@ -188,8 +183,44 @@ void DrawItem(char* canvas, const int canvasHeight, const int canvasWidth, const
             }
         }
     }
-    y += piptItem[itemNumber].height;
-    y++;
+}
+
+int FindConnection(int itemNumber, int connectionNumber) {
+    piptItem[itemNumber].connection[connectionNumber][0] = TITLE_MARK;
+    for (int i = 0; i < MAX_ITEM_COUNT; i++) {
+        if (piptItem[i].title[0] == '\0') {
+            return -1;
+        }
+        if (strcmp(piptItem[itemNumber].connection[connectionNumber], piptItem[i].title) == 0) {
+            return i;
+        }
+    }
+    return -2;
+}
+
+void PushItem(int itemNumber, int yPush, int xPush) {
+    piptItem[itemNumber].y += yPush;
+    piptItem[itemNumber].x += xPush;
+}
+
+void PlaceItem(char* canvas, int itemNumber, int canvasWidth) {
+    if (piptItem[itemNumber].x == 0) {
+        piptItem[itemNumber].x = 1;
+        piptItem[itemNumber].y = 1;
+    }
+
+    DrawItem(canvas, itemNumber, canvasWidth);
+
+    for (int i = 0; i < MAX_ITEM_COUNT; i++) {
+        if (piptItem[itemNumber].connection[i][0] == '\0') {
+            continue;
+        }
+        int connectionItem = FindConnection(itemNumber, i);
+        printf("coni:%d\n", connectionItem);
+    }
+    //for connections
+    //PushItem(canvas, itemNumber, canvasWidth);
+    //PlaceItem(canvas, itemNumber, canvasWidth);
 }
 
 int main(int argc, char* argv[]) {
@@ -212,13 +243,13 @@ int main(int argc, char* argv[]) {
     int canvasHeight = FindCanvasHeight(itemCount);
     int canvasWidth = FindCanvasWidth(itemCount);
     canvasWidth++;
-
     char canvas[canvasHeight * canvasWidth];
     InitCanvas(canvas, canvasHeight, canvasWidth);
 
-    for (int i = 0; i < itemCount; i++) {
-        DrawItem(canvas, canvasHeight, canvasWidth, i);
-    }
+    PushItem(0, 1, 1);
+    PlaceItem(canvas, 0, canvasWidth);
+    PushItem(1, 5, 1);
+    PlaceItem(canvas, 1, canvasWidth);
 
     printf("%s\n", canvas);
 
