@@ -198,9 +198,10 @@ int FindConnection(int itemNumber, int connectionNumber) {
     return -1;
 }
 
-void PushItem(int itemNumber, int yPush, int xPush) {
+int PushItem(int itemNumber, int yPush, int xPush) {
     piptItem[itemNumber].y += yPush;
     piptItem[itemNumber].x += xPush;
+    return piptItem[itemNumber].width;
 }
 
 void PlaceItem(char* canvas, int itemNumber, int canvasWidth) {
@@ -216,7 +217,10 @@ void PlaceItem(char* canvas, int itemNumber, int canvasWidth) {
             printf("connection not found for %s", piptItem[itemNumber].connection[i]);
         }
 
-        PushItem(connectionItem, piptItem[itemNumber].height + 2, piptItem[itemNumber].y);
+        static int xOffset = 0;
+        xOffset = PushItem(connectionItem, piptItem[itemNumber].height + 2, xOffset + 1);
+        xOffset++;
+
         PlaceItem(canvas, connectionItem, canvasWidth);
     }
 }
