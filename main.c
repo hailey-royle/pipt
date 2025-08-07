@@ -166,8 +166,10 @@ void InitCanvas(char* canvas, const int canvasHeight, const int canvasWidth) {
 }
 
 void DrawItem(char* canvas, const int canvasHeight, const int canvasWidth, const int itemNumber) {
-    piptItem[itemNumber].x = 1;
-    piptItem[itemNumber].y = 1;
+    static int x = 1;
+    static int y = 1;
+    piptItem[itemNumber].x = x;
+    piptItem[itemNumber].y = y;
 
     for (int i = 0; i < piptItem[itemNumber].height; i++) {
         if (i == 0) {
@@ -186,20 +188,20 @@ void DrawItem(char* canvas, const int canvasHeight, const int canvasWidth, const
             }
         }
     }
+    y += piptItem[itemNumber].height;
+    y++;
 }
 
 int main(int argc, char* argv[]) {
     const int argvPath = VerifyArgs(argc);
 
     if (argvPath != 1) {
-        printf("argv failure\n");
         return 0;
     }
 
     const int itemCount = LoadFileData(argv[argvPath]);
 
     if (itemCount < 1) {
-        printf("file %s does not have any data\n", argv[argvPath]);
         return 0;
     }
 

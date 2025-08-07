@@ -1,7 +1,7 @@
 # file
 
-> raw data is stored in
-> a markdown file
+> raw data is stored
+> in a markdown file
 
 - parsing
 
@@ -17,13 +17,13 @@
 # generation
 
 > the struct data is
-> organized based on the
-> connections and an
-> output is found
+> organized based on
+> the connections and
+> an output is found
 
 - printing
 
 # printing
 
-> the orgaized data
-> is printed
+> the data is
+> rendered
