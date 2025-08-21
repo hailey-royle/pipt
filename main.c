@@ -156,7 +156,7 @@ int FindCanvasWidth(const int itemCount) {
     return canvasWidth;
 }
 
-void InitCanvas(char* canvas, const int canvasHeight, const int canvasWidth) {
+void InitCanvasFormat(char* canvas, const int canvasHeight, const int canvasWidth) {
     for (int i = 0; i < canvasHeight * canvasWidth; i++) {
         canvas[i] = BACKGROUND_CHAR;
     }
@@ -238,7 +238,7 @@ int main(int argc, char* argv[]) {
     int canvasHeight = FindCanvasHeight(itemCount);
     int canvasWidth = FindCanvasWidth(itemCount);
     char canvas[canvasHeight * canvasWidth];
-    InitCanvas(canvas, canvasHeight, canvasWidth);
+    InitCanvasFormat(canvas, canvasHeight, canvasWidth);
 
     PushItem(0, 1, 1);
     PlaceItem(canvas, 0, canvasWidth);
