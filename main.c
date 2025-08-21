@@ -144,16 +144,15 @@ int FindCanvasHeight(const int itemCount) {
 }
 
 int FindCanvasWidth(const int itemCount) {
-    int canvasWidth = 1;
-    canvasWidth += piptItem[0].width;
+    int canvasWidth = 0;
+    canvasWidth = piptItem[0].width + 3;
     if (piptItem[1].width > piptItem[0].width) {
-        canvasWidth = piptItem[1].width;
+        canvasWidth = piptItem[1].width + 3;
     }
     for (int i = 2; i <= itemCount; i++) {
         canvasWidth += piptItem[i].width;
         canvasWidth++;
     }
-    canvasWidth++;
     return canvasWidth;
 }
 
@@ -244,7 +243,6 @@ int main(int argc, char* argv[]) {
 
     int canvasHeight = FindCanvasHeight(itemCount);
     int canvasWidth = FindCanvasWidth(itemCount);
-    canvasWidth++;
     char canvas[canvasHeight * canvasWidth];
     InitCanvas(canvas, canvasHeight, canvasWidth);
 
