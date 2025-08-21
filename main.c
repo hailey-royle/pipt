@@ -1,10 +1,9 @@
 #include <stdio.h>
 #include <string.h>
 
-#define MAX_ITEM_WIDTH 32
-#define MAX_ITEM_HEIGHT 8
-#define MAX_ITEM_DATA MAX_ITEM_WIDTH
+#define MAX_ITEM_DATA_LENGTH 32
 #define MAX_ITEM_COUNT 16
+#define MAX_ITEM_BODY_LINES 8
 #define TITLE_MARK '#'
 #define BODY_MARK '>'
 #define CONNECTION_MARK '-'
@@ -15,15 +14,16 @@
 #define BACKGROUND_CHAR '.'
 
 struct piptItem {
-    char connection[MAX_ITEM_COUNT][MAX_ITEM_DATA];
-    char title[MAX_ITEM_DATA];
-    char top[MAX_ITEM_DATA];
-    char body[MAX_ITEM_COUNT][MAX_ITEM_DATA];
-    char bottom[MAX_ITEM_DATA];
+    char connection[MAX_ITEM_COUNT][MAX_ITEM_DATA_LENGTH];
+    char body[MAX_ITEM_BODY_LINES][MAX_ITEM_DATA_LENGTH];
+    char title[MAX_ITEM_DATA_LENGTH];
+    char top[MAX_ITEM_DATA_LENGTH];
+    char bottom[MAX_ITEM_DATA_LENGTH];
     int width;
     int height;
     int x;
     int y;
+    int visited;
 };
 struct piptItem piptItem[MAX_ITEM_COUNT];
 
@@ -42,7 +42,7 @@ int VerifyArgs(const int argc) {
 int LoadFileData(const char* arg) {
     FILE *file;
     file = fopen(arg, "r");
-    char rawData[MAX_ITEM_DATA];
+    char rawData[MAX_ITEM_DATA_LENGTH];
 
     if (file == NULL) {
         printf("file %s not found\n", arg);
@@ -51,12 +51,12 @@ int LoadFileData(const char* arg) {
 
     int itemCount = -1;
 
-    while(fgets(rawData, MAX_ITEM_DATA, file)) {
+    while(fgets(rawData, MAX_ITEM_DATA_LENGTH, file)) {
         static int lineNumber = 0;
         static int bodyNumber = 0;
         static int connectionNumber = 0;
         lineNumber++;
-        if (strlen(rawData) >= MAX_ITEM_DATA - 1) {
+        if (strlen(rawData) >= MAX_ITEM_DATA_LENGTH - 1) {
             printf("data overflow on line %d\n", lineNumber);
             return -1;
         }
@@ -79,6 +79,9 @@ int LoadFileData(const char* arg) {
             }
             piptItem[itemCount].height++;
             bodyNumber++;
+            if (bodyNumber >= MAX_ITEM_BODY_LINES) {
+                printf("item %d has to many lines in its body, max is %d", itemCount, MAX_ITEM_BODY_LINES);
+            }
         }
         else if (rawData[0] == CONNECTION_MARK) {
             strcpy(piptItem[itemCount].connection[connectionNumber], rawData);
