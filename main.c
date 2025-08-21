@@ -228,11 +228,9 @@ void PlaceItem(char* canvas, int itemNumber, int canvasWidth) {
 
 int main(int argc, char* argv[]) {
     const int argvPath = VerifyArgs(argc);
-
     if (argvPath != 1) return 0;
 
     const int itemCount = LoadFileData(argv[argvPath]);
-
     if (itemCount < 1) return 0;
 
     FormatItems(itemCount);
