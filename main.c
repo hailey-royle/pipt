@@ -126,10 +126,12 @@ void FormatBottom(const int itemNumber) {
     piptItem[itemNumber].bottom[piptItem[itemNumber].width - 1] = CORRNER_CHAR;
 }
 
-void FormatItem(const int itemNumber) {
-    FormatTop(itemNumber);
-    FormatBody(itemNumber);
-    FormatBottom(itemNumber);
+void FormatItem(const int itemCount) {
+    for (int i = 0; i < itemCount; i++) {
+        FormatTop(i);
+        FormatBody(i);
+        FormatBottom(i);
+    }
 }
 
 int FindCanvasHeight(const int itemCount) {
@@ -238,9 +240,7 @@ int main(int argc, char* argv[]) {
         return 0;
     }
 
-    for (int i = 0; i < itemCount; i++) {
-        FormatItem(i);
-    }
+    FormatItem(itemCount);
 
     int canvasHeight = FindCanvasHeight(itemCount);
     int canvasWidth = FindCanvasWidth(itemCount);
