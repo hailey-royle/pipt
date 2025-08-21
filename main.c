@@ -60,6 +60,9 @@ int LoadFileData(const char* arg) {
             printf("data overflow on line %d\n", lineNumber);
             return -1;
         }
+        if (bodyNumber >= MAX_ITEM_BODY_LINES) {
+            printf("item %d has to many lines in its body, max is %d", itemCount, MAX_ITEM_BODY_LINES);
+        }
         if (rawData[0] == '\n') {
             continue;
         }
@@ -68,20 +71,10 @@ int LoadFileData(const char* arg) {
             bodyNumber = 0;
             connectionNumber = 0;
             strcpy(piptItem[itemCount].title, rawData);
-            piptItem[itemCount].width = strlen(rawData) + 1;
-            piptItem[itemCount].height++;
         }
         else if (rawData[0] == BODY_MARK) {
             strcpy(piptItem[itemCount].body[bodyNumber], rawData);
-            int lineWidth = strlen(rawData) + 1;
-            if (piptItem[itemCount].width < lineWidth) {
-                piptItem[itemCount].width = lineWidth;
-            }
-            piptItem[itemCount].height++;
             bodyNumber++;
-            if (bodyNumber >= MAX_ITEM_BODY_LINES) {
-                printf("item %d has to many lines in its body, max is %d", itemCount, MAX_ITEM_BODY_LINES);
-            }
         }
         else if (rawData[0] == CONNECTION_MARK) {
             strcpy(piptItem[itemCount].connection[connectionNumber], rawData);
@@ -97,6 +90,30 @@ int LoadFileData(const char* arg) {
 
     fclose(file);
     return itemCount + 1;
+}
+
+int FindItemHeight(const int itemNumber) {
+    int height = 0;
+    for (int i = 0; i < MAX_ITEM_BODY_LINES; i++) {
+        if (piptItem[itemNumber].body[i][0] == '\0') {
+            break;
+        }
+        height++;
+    }
+    return height + 2;
+}
+
+int FindItemWidth(const int itemNumber) {
+    int width = strlen(piptItem[itemNumber].title);
+    for (int i = 0; i < MAX_ITEM_BODY_LINES; i++) {
+        if (piptItem[itemNumber].body[i][0] == '\0') {
+            break;
+        }
+        if (width < strlen(piptItem[itemNumber].body[i])) {
+            width = strlen(piptItem[itemNumber].body[i]);
+        }
+    }
+    return width + 1;
 }
 
 void FormatTop(const int itemNumber) {
@@ -121,7 +138,6 @@ void FormatBody(const int itemNumber) {
 }
 
 void FormatBottom(const int itemNumber) {
-    piptItem[itemNumber].height++;
     piptItem[itemNumber].bottom[0] = CORRNER_CHAR;
     for (int i = 1; i <= piptItem[itemNumber].width - 2; i++) {
         piptItem[itemNumber].bottom[i] = HORIZONTAL_CHAR;
@@ -131,6 +147,8 @@ void FormatBottom(const int itemNumber) {
 
 void FormatItems(const int itemCount) {
     for (int i = 0; i < itemCount; i++) {
+        piptItem[i].height = FindItemHeight(i);
+        piptItem[i].width = FindItemWidth(i);
         FormatTop(i);
         FormatBody(i);
         FormatBottom(i);
