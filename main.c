@@ -256,15 +256,5 @@ int main(int argc, char* argv[]) {
 
     FormatItems(itemCount);
 
-    int canvasHeight = FindCanvasHeight(itemCount);
-    int canvasWidth = FindCanvasWidth(itemCount);
-    char canvas[canvasHeight * canvasWidth];
-    InitCanvasFormat(canvas, canvasHeight, canvasWidth);
-
-    PushItem(0, 1, 1);
-    PlaceItem(canvas, 0, canvasWidth);
-
-    printf("%s\n", canvas);
-
     return 0;
 }
