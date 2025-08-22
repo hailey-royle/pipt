@@ -168,7 +168,7 @@ int FindCanvasWidth(const int itemCount) {
     int canvasWidth = 0;
     canvasWidth = piptItem[0].width + 3;
     if (piptItem[1].width > piptItem[0].width) {
-        canvasWidth = piptItem[1].width + 3;
+        canvasWidth = piptItem[1].width + 2;
     }
     for (int i = 2; i <= itemCount; i++) {
         canvasWidth += piptItem[i].width;
