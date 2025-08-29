@@ -201,101 +201,6 @@ void FormatItems(const int itemCount) {
     }
 }
 
-/*
-
-int FindCanvasHeight(const int itemCount) {
-    int canvasHeight = 1;
-    for (int i = 0; i <= itemCount - 1; i++) {
-        canvasHeight += piptItem[i].height;
-        canvasHeight++;
-    }
-    return canvasHeight;
-}
-
-int FindCanvasWidth(const int itemCount) {
-    int canvasWidth = 0;
-    canvasWidth = piptItem[0].width + 3;
-    if (piptItem[1].width > piptItem[0].width) {
-        canvasWidth = piptItem[1].width + 2;
-    }
-    for (int i = 2; i <= itemCount; i++) {
-        canvasWidth += piptItem[i].width;
-        canvasWidth++;
-    }
-    return canvasWidth;
-}
-
-void InitCanvasFormat(char* canvas, const int canvasHeight, const int canvasWidth) {
-    for (int i = 0; i < canvasHeight * canvasWidth; i++) {
-        canvas[i] = BACKGROUND_CHAR;
-    }
-    for (int i = canvasWidth - 1; i < canvasHeight * canvasWidth; i += canvasWidth) {
-        canvas[i] = '\n';
-    }
-    canvas[(canvasHeight * canvasWidth) - 1] = '\0';
-}
-
-void DrawItem(char* canvas, int itemNumber, int canvasWidth) {
-    for (int i = 0; i < piptItem[itemNumber].height; i++) {
-        if (i == 0) {
-            for (int j = 0; j <= piptItem[itemNumber].width - 1; j++) {
-                canvas[((piptItem[itemNumber].y * canvasWidth) + piptItem[itemNumber].x) + j] = piptItem[itemNumber].top[j];
-            }
-        }
-        else if (i == piptItem[itemNumber].height - 1) {
-            for (int j = 0; j <= piptItem[itemNumber].width - 1; j++) {
-                canvas[(((piptItem[itemNumber].y + i) * canvasWidth) + piptItem[itemNumber].x) + j] = piptItem[itemNumber].bottom[j];
-            }
-        }
-        else {
-            for (int j = 0; j <= piptItem[itemNumber].width - 1; j++) {
-                canvas[(((piptItem[itemNumber].y + i) * canvasWidth) + piptItem[itemNumber].x) + j] = piptItem[itemNumber].body[i - 1][j];
-            }
-        }
-    }
-}
-
-int FindConnection(int itemNumber, int connectionNumber) {
-    piptItem[itemNumber].connection[connectionNumber][0] = TITLE_MARK;
-    for (int i = 0; i < MAX_ITEM_COUNT; i++) {
-        if (piptItem[i].title[0] == '\0') {
-            return -1;
-        }
-        if (strcmp(piptItem[itemNumber].connection[connectionNumber], piptItem[i].title) == 0) {
-            return i;
-        }
-    }
-    return -1;
-}
-
-int PushItem(int itemNumber, int yPush, int xPush) {
-    piptItem[itemNumber].y += yPush;
-    piptItem[itemNumber].x += xPush;
-    return piptItem[itemNumber].width;
-}
-
-void PlaceItem(char* canvas, int itemNumber, int canvasWidth) {
-    DrawItem(canvas, itemNumber, canvasWidth);
-
-    for (int i = 0; i < MAX_ITEM_COUNT; i++) {
-        if (piptItem[itemNumber].connection[i][0] == '\0') {
-            break;
-        }
-
-        int connectionItem = FindConnection(itemNumber, i);
-        if (connectionItem == -1) {
-            printf("connection not found for %s", piptItem[itemNumber].connection[i]);
-        }
-
-        static int xOffset = 0;
-        xOffset = PushItem(connectionItem, piptItem[itemNumber].height + 2, xOffset + 1);
-        xOffset++;
-
-        PlaceItem(canvas, connectionItem, canvasWidth);
-    }
-}
-*/
-
 int main(int argc, char* argv[]) {
     const int argvPath = VerifyArgs(argc);
     if (argvPath != 1) return -1;
@@ -307,6 +212,7 @@ int main(int argc, char* argv[]) {
 
     piptItemStack.capacity = MAX_ITEM_COUNT;
     piptItemStack.top = -1;
+    
 
     return 0;
 }
