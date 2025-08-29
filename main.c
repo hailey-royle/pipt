@@ -27,6 +27,52 @@ struct piptItem {
 };
 struct piptItem piptItem[MAX_ITEM_COUNT];
 
+struct piptItemStack {
+    int top;
+    int capacity;
+    struct piptItem piptItem[MAX_ITEM_COUNT];
+};
+struct piptItemStack piptItemStack;
+
+//==============================
+//stack
+//==============================
+
+int StackRemaining(struct piptItemStack stack) {
+    return stack.capacity - stack.top;
+}
+
+void StackPush(struct piptItemStack* stack, struct piptItem item){
+    if (StackRemaining(*stack) == 0) {
+        printf("stack overflow\n");
+        return;
+    }
+    stack->top++;
+    stack->piptItem[stack->top] = item;
+}
+
+int StackPop(struct piptItemStack* stack) {
+    if (stack->top == 0) {
+        printf("stack underflow\n");
+        stack->top = -1;
+        return -1;
+    }
+    stack->top--;
+    return stack->top;
+}
+
+int StackPeek(struct piptItemStack stack) {
+    if (stack.top == 0) {
+        printf("stack empty\n");
+        return -1;
+    }
+    return stack.top;
+}
+
+//==============================
+//main
+//==============================
+
 int VerifyArgs(const int argc) {
     if (argc < 2) {
         printf("no arguments given\n");
@@ -155,6 +201,8 @@ void FormatItems(const int itemCount) {
     }
 }
 
+/*
+
 int FindCanvasHeight(const int itemCount) {
     int canvasHeight = 1;
     for (int i = 0; i <= itemCount - 1; i++) {
@@ -246,6 +294,7 @@ void PlaceItem(char* canvas, int itemNumber, int canvasWidth) {
         PlaceItem(canvas, connectionItem, canvasWidth);
     }
 }
+*/
 
 int main(int argc, char* argv[]) {
     const int argvPath = VerifyArgs(argc);
@@ -255,6 +304,9 @@ int main(int argc, char* argv[]) {
     if (itemCount <= 0) return -1;
 
     FormatItems(itemCount);
+
+    piptItemStack.capacity = MAX_ITEM_COUNT;
+    piptItemStack.top = -1;
 
     return 0;
 }
