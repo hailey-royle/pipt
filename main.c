@@ -27,46 +27,44 @@ struct piptItem {
 };
 struct piptItem piptItem[MAX_ITEM_COUNT];
 
-struct piptItemStack {
+struct stack {
     int top;
     int capacity;
-    struct piptItem piptItem[MAX_ITEM_COUNT];
+    int item[MAX_ITEM_COUNT];
 };
-struct piptItemStack piptItemStack;
 
 //==============================
 //stack
 //==============================
 
-int StackRemaining(struct piptItemStack stack) {
+int StackRemaining(struct stack stack) {
     return stack.capacity - stack.top;
 }
 
-void StackPush(struct piptItemStack* stack, struct piptItem item){
+void StackPush(struct stack* stack, int item){
     if (StackRemaining(*stack) == 0) {
         printf("stack overflow\n");
         return;
     }
     stack->top++;
-    stack->piptItem[stack->top] = item;
+    stack->item[stack->top] = item;
 }
 
-int StackPop(struct piptItemStack* stack) {
-    if (stack->top == 0) {
+int StackPop(struct stack* stack) {
+    if (stack->top < 0) {
         printf("stack underflow\n");
-        stack->top = -1;
         return -1;
     }
     stack->top--;
     return stack->top;
 }
 
-int StackPeek(struct piptItemStack stack) {
-    if (stack.top == 0) {
+int StackPeek(struct stack* stack) {
+    if (stack->top == 0) {
         printf("stack empty\n");
         return -1;
     }
-    return stack.top;
+    return stack->top;
 }
 
 //==============================
@@ -201,6 +199,53 @@ void FormatItems(const int itemCount) {
     }
 }
 
+int FindConnection(int itemNumber, int connectionNumber) {
+    piptItem[itemNumber].connection[connectionNumber][0] = TITLE_MARK;
+    for (int i = 0; i < MAX_ITEM_COUNT; i++) {
+        if (piptItem[i].title[0] == '\0') {
+            return -1;
+        }
+        if (strcmp(piptItem[itemNumber].connection[connectionNumber], piptItem[i].title) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void PossitionItemsY(const int itemCount) {
+    int currentY = 1;
+    struct stack stackY;
+    stackY.top = -1;
+    stackY.capacity = MAX_ITEM_COUNT;
+
+    StackPush(&stackY, 0);
+    while (stackY.top >= 0) {
+        piptItem[stackY.top].y = currentY;
+        piptItem[stackY.top].visited = 1;
+
+        int connection;
+        for (int i = 0; i < MAX_ITEM_COUNT; i++) {
+            connection = FindConnection(stackY.item[stackY.top], i);
+            if (piptItem[connection].visited == 1) {
+                continue;
+            }
+            break;
+        }
+        if (connection >= 0) {
+            currentY += piptItem[stackY.top].height + 1;
+            StackPush(&stackY, connection);
+        }
+        if (connection == -1) {
+            currentY -= piptItem[stackY.top].height + 1;
+            StackPop(&stackY);
+        }
+        if (connection < -1) {
+            printf("connection error\n");
+            break;
+        }
+    }
+}
+
 int main(int argc, char* argv[]) {
     const int argvPath = VerifyArgs(argc);
     if (argvPath != 1) return -1;
@@ -210,9 +255,11 @@ int main(int argc, char* argv[]) {
 
     FormatItems(itemCount);
 
-    piptItemStack.capacity = MAX_ITEM_COUNT;
-    piptItemStack.top = -1;
-    
+    PossitionItemsY(itemCount);
+
+    for (int i = 0; i < MAX_ITEM_COUNT; i++) {
+        printf("item: %s, y: %d, visited:%d\n", piptItem[i].top, piptItem[i].y, piptItem[i].visited);
+    }
 
     return 0;
 }
