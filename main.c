@@ -23,7 +23,6 @@ struct piptItem {
     int height;
     int x;
     int y;
-    int visited;
 };
 struct piptItem piptItem[MAX_ITEM_COUNT];
 
@@ -212,7 +211,7 @@ int FindConnection(int itemNumber, int connectionNumber) {
     return -1;
 }
 
-void PossitionItemsY(const int itemCount) {
+void PossitionItemsY() {
     int currentY = 1;
     struct stack stackY;
     stackY.top = -1;
@@ -221,12 +220,11 @@ void PossitionItemsY(const int itemCount) {
     StackPush(&stackY, 0);
     while (stackY.top >= 0) {
         piptItem[stackY.top].y = currentY;
-        piptItem[stackY.top].visited = 1;
 
         int connection;
         for (int i = 0; i < MAX_ITEM_COUNT; i++) {
             connection = FindConnection(stackY.item[stackY.top], i);
-            if (piptItem[connection].visited == 1) {
+            if (piptItem[connection].y != 0) {
                 continue;
             }
             break;
@@ -255,10 +253,10 @@ int main(int argc, char* argv[]) {
 
     FormatItems(itemCount);
 
-    PossitionItemsY(itemCount);
+    PossitionItemsY();
 
     for (int i = 0; i < MAX_ITEM_COUNT; i++) {
-        printf("item: %s, y: %d, visited:%d\n", piptItem[i].top, piptItem[i].y, piptItem[i].visited);
+        printf("item: %s, y: %d\n", piptItem[i].top, piptItem[i].y);
     }
 
     return 0;
