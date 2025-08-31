@@ -58,14 +58,6 @@ int StackPop(struct stack* stack) {
     return stack->top;
 }
 
-int StackPeek(struct stack* stack) {
-    if (stack->top == 0) {
-        printf("stack empty\n");
-        return -1;
-    }
-    return stack->top;
-}
-
 //==============================
 //main
 //==============================
