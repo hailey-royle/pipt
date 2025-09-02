@@ -19,6 +19,8 @@ struct piptItem {
     char title[MAX_ITEM_DATA_LENGTH];
     char top[MAX_ITEM_DATA_LENGTH];
     char bottom[MAX_ITEM_DATA_LENGTH];
+    int connected[MAX_ITEM_COUNT];
+    int connectionCount;
     int width;
     int height;
     int x;
@@ -32,9 +34,9 @@ struct stack {
     int item[MAX_ITEM_COUNT];
 };
 
-//==============================
-//stack
-//==============================
+//==============================================================
+//  Stack
+//==============================================================
 
 int StackRemaining(struct stack stack) {
     return stack.capacity - stack.top;
@@ -58,9 +60,9 @@ int StackPop(struct stack* stack) {
     return stack->top;
 }
 
-//==============================
-//main
-//==============================
+//==============================================================
+//  Input
+//==============================================================
 
 int VerifyArgs(const int argc) {
     if (argc < 2) {
@@ -113,6 +115,7 @@ int LoadFileData(const char* arg) {
         }
         else if (rawData[0] == CONNECTION_MARK) {
             strcpy(piptItem[itemCount].connection[connectionNumber], rawData);
+            piptItem[itemCount].connectionCount++;
             connectionNumber++;
         }
         else {
@@ -127,6 +130,38 @@ int LoadFileData(const char* arg) {
     return itemCount + 1;
 }
 
+//==============================================================
+//  ConnectItems
+//==============================================================
+
+void FindConnection(const int itemCount, const int itemNumber, const int connectionNumber) {
+    piptItem[itemNumber].connection[connectionNumber][0] = TITLE_MARK;
+    for (int i = 0; i < itemCount; i++) {
+        if (piptItem[i].title[0] == '\0') {
+            return;
+        }
+        if (strcmp(piptItem[itemNumber].connection[connectionNumber], piptItem[i].title) == 0) {
+            piptItem[itemNumber].connected[connectionNumber] = i;
+        }
+    }
+}
+
+void ConnectConnections(const int itemCount, const int itemNumber) {
+    for (int i = 0; i < itemCount; i++) {
+        FindConnection(itemCount, itemNumber, i);
+    }
+}
+
+void ConnectItems(const int itemCount) {
+    for (int i = 0; i < itemCount; i++) {
+        ConnectConnections(itemCount, i);
+    }
+}
+
+//==============================================================
+//  FormatItems
+//==============================================================
+
 int FindItemHeight(const int itemNumber) {
     int height = 0;
     for (int i = 0; i < MAX_ITEM_BODY_LINES; i++) {
@@ -139,7 +174,7 @@ int FindItemHeight(const int itemNumber) {
 }
 
 int FindItemWidth(const int itemNumber) {
-    int width = strlen(piptItem[itemNumber].title);
+    long unsigned int width = strlen(piptItem[itemNumber].title);
     for (int i = 0; i < MAX_ITEM_BODY_LINES; i++) {
         if (piptItem[itemNumber].body[i][0] == '\0') {
             break;
@@ -190,18 +225,9 @@ void FormatItems(const int itemCount) {
     }
 }
 
-int FindConnection(int itemNumber, int connectionNumber) {
-    piptItem[itemNumber].connection[connectionNumber][0] = TITLE_MARK;
-    for (int i = 0; i < MAX_ITEM_COUNT; i++) {
-        if (piptItem[i].title[0] == '\0') {
-            return -1;
-        }
-        if (strcmp(piptItem[itemNumber].connection[connectionNumber], piptItem[i].title) == 0) {
-            return i;
-        }
-    }
-    return -1;
-}
+//==============================================================
+//  PossitionItems
+//==============================================================
 
 void PossitionItemsY() {
     int currentY = 1;
@@ -211,30 +237,24 @@ void PossitionItemsY() {
 
     StackPush(&stackY, 0);
     while (stackY.top >= 0) {
-        piptItem[stackY.top].y = currentY;
-
-        int connection;
-        for (int i = 0; i < MAX_ITEM_COUNT; i++) {
-            connection = FindConnection(stackY.item[stackY.top], i);
-            if (piptItem[connection].y != 0) {
-                continue;
-            }
-            break;
-        }
+        int connection = -1;
         if (connection >= 0) {
             currentY += piptItem[stackY.top].height + 1;
             StackPush(&stackY, connection);
         }
         if (connection == -1) {
-            currentY -= piptItem[stackY.top].height + 1;
+            piptItem[stackY.top].y = currentY;
+            printf("item: %s, y %d\n", piptItem[stackY.top].top, piptItem[stackY.top].y);
+            currentY -= piptItem[stackY.top].height;
             StackPop(&stackY);
         }
-        if (connection < -1) {
-            printf("connection error\n");
-            break;
-        }
     }
+    printf("\n\n");
 }
+
+//==============================================================
+//  main
+//==============================================================
 
 int main(int argc, char* argv[]) {
     const int argvPath = VerifyArgs(argc);
@@ -243,12 +263,22 @@ int main(int argc, char* argv[]) {
     const int itemCount = LoadFileData(argv[argvPath]);
     if (itemCount <= 0) return -1;
 
+    ConnectItems(itemCount);
+
     FormatItems(itemCount);
 
-    PossitionItemsY();
+    //PossitionItemsY();
 
-    for (int i = 0; i < MAX_ITEM_COUNT; i++) {
-        printf("item: %s, y: %d\n", piptItem[i].top, piptItem[i].y);
+    for (int i = 0; i < itemCount; i++) {
+        printf("\nx:%d y:%d\n", piptItem[i].x, piptItem[i].y);
+        for (int j = 0; j < piptItem[i].connectionCount; j++) {
+            printf("connection:%d\n", piptItem[i].connected[j]);
+        }
+        printf("%s\n", piptItem[i].top);
+        for (int j = 0; j < piptItem[i].height - 2; j++) {
+            printf("%s\n", piptItem[i].body[j]);
+        }
+        printf("%s\n", piptItem[i].bottom);
     }
 
     return 0;
