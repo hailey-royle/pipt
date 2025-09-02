@@ -253,6 +253,25 @@ void PossitionItemsY() {
 }
 
 //==============================================================
+//  PrintItems
+//==============================================================
+
+void PrintItems(const int itemCount) {
+    for (int i = 0; i < itemCount; i++) {
+        printf("\nx:%d y:%d\n", piptItem[i].x, piptItem[i].y);
+        for (int j = 0; j < piptItem[i].connectionCount; j++) {
+            printf("connection:%d\n", piptItem[i].connected[j]);
+        }
+        printf("%s\n", piptItem[i].top);
+        for (int j = 0; j < piptItem[i].height - 2; j++) {
+            printf("%s\n", piptItem[i].body[j]);
+        }
+        printf("%s\n", piptItem[i].bottom);
+    }
+}
+
+
+//==============================================================
 //  main
 //==============================================================
 
@@ -269,17 +288,7 @@ int main(int argc, char* argv[]) {
 
     //PossitionItemsY();
 
-    for (int i = 0; i < itemCount; i++) {
-        printf("\nx:%d y:%d\n", piptItem[i].x, piptItem[i].y);
-        for (int j = 0; j < piptItem[i].connectionCount; j++) {
-            printf("connection:%d\n", piptItem[i].connected[j]);
-        }
-        printf("%s\n", piptItem[i].top);
-        for (int j = 0; j < piptItem[i].height - 2; j++) {
-            printf("%s\n", piptItem[i].body[j]);
-        }
-        printf("%s\n", piptItem[i].bottom);
-    }
+    PrintItems(itemCount);
 
     return 0;
 }
