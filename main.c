@@ -218,7 +218,6 @@ int ValidConnectionY(struct stack* stackY) {
     return -1;
 }
 
-
 void PossitionItemsY() {
     int currentY = 1;
     struct stack stackY;
