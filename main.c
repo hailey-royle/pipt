@@ -159,10 +159,6 @@ void ConnectItems() {
 //  FormatItems
 //==============================================================
 
-int FindItemHeight(const int itemNumber) {
-    return pipt.item[itemNumber].bodyLineCount + 2;
-}
-
 int FindItemWidth(const int itemNumber) {
     long unsigned int width = strlen(pipt.item[itemNumber].title);
     for (int i = 0; i < MAX_ITEM_BODY_LINES; i++) {
@@ -207,7 +203,7 @@ void FormatBottom(const int itemNumber) {
 
 void FormatItems() {
     for (int i = 0; i <= pipt.itemCount; i++) {
-        pipt.item[i].height = FindItemHeight(i);
+        pipt.item[i].height = pipt.item[i].bodyLineCount + 2;
         pipt.item[i].width = FindItemWidth(i);
         FormatTop(i);
         FormatBody(i);
