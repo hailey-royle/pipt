@@ -267,13 +267,13 @@ int main(int argc, char* argv[]) {
         return -1;
     }
 
-    ConnectItems(pipt.itemCount);
+    ConnectItems();
 
-    FormatItems(pipt.itemCount);
+    FormatItems();
 
     //PossitionItemsY();
 
-    PrintItems(pipt.itemCount);
+    PrintItems();
 
     return 0;
 }
