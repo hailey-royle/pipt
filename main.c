@@ -161,10 +161,7 @@ void ConnectItems() {
 
 int FindItemWidth(const int itemNumber) {
     long unsigned int width = strlen(pipt.item[itemNumber].title);
-    for (int i = 0; i < MAX_ITEM_BODY_LINES; i++) {
-        if (pipt.item[itemNumber].body[i][0] == '\0') {
-            break;
-        }
+    for (int i = 0; i < pipt.item[itemNumber].bodyLineCount; i++) {
         if (width < strlen(pipt.item[itemNumber].body[i])) {
             width = strlen(pipt.item[itemNumber].body[i]);
         }
