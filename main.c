@@ -96,7 +96,6 @@ void LoadFileData(const char* arg) {
     while(fgets(rawData, MAX_ITEM_DATA_LENGTH, file)) {
         static int lineNumber = 0;
         static int bodyNumber = 0;
-        static int connectionNumber = 0;
         lineNumber++;
         if (strlen(rawData) >= MAX_ITEM_DATA_LENGTH - 1) {
             printf("data overflow on line %d\n", lineNumber);
@@ -111,7 +110,6 @@ void LoadFileData(const char* arg) {
         if (rawData[0] == TITLE_MARK) {
             pipt.itemCount++;
             bodyNumber = 0;
-            connectionNumber = 0;
             strcpy(pipt.item[pipt.itemCount].title, rawData);
         }
         else if (rawData[0] == BODY_MARK) {
@@ -119,9 +117,8 @@ void LoadFileData(const char* arg) {
             bodyNumber++;
         }
         else if (rawData[0] == CONNECTION_MARK) {
-            strcpy(pipt.item[pipt.itemCount].connection[connectionNumber], rawData);
+            strcpy(pipt.item[pipt.itemCount].connection[pipt.item[pipt.itemCount].connectionCount], rawData);
             pipt.item[pipt.itemCount].connectionCount++;
-            connectionNumber++;
         }
         else {
             printf("data on line %d could not be prosessed\n", lineNumber);
