@@ -25,6 +25,7 @@ struct item {
     int x;
     int y;
     int connectionCount;
+    int bodyLineCount;
 };
 
 struct pipt {
@@ -95,13 +96,12 @@ void LoadFileData(const char* arg) {
     
     while(fgets(rawData, MAX_ITEM_DATA_LENGTH, file)) {
         static int lineNumber = 0;
-        static int bodyNumber = 0;
         lineNumber++;
         if (strlen(rawData) >= MAX_ITEM_DATA_LENGTH - 1) {
             printf("data overflow on line %d\n", lineNumber);
             return;
         }
-        if (bodyNumber >= MAX_ITEM_BODY_LINES) {
+        if (pipt.item[pipt.itemCount].bodyLineCount >= MAX_ITEM_BODY_LINES) {
             printf("item %d has to many lines in its body, max is %d", pipt.itemCount, MAX_ITEM_BODY_LINES);
         }
         if (rawData[0] == '\n') {
@@ -109,12 +109,11 @@ void LoadFileData(const char* arg) {
         }
         if (rawData[0] == TITLE_MARK) {
             pipt.itemCount++;
-            bodyNumber = 0;
             strcpy(pipt.item[pipt.itemCount].title, rawData);
         }
         else if (rawData[0] == BODY_MARK) {
-            strcpy(pipt.item[pipt.itemCount].body[bodyNumber], rawData);
-            bodyNumber++;
+            strcpy(pipt.item[pipt.itemCount].body[pipt.item[pipt.itemCount].bodyLineCount], rawData);
+            pipt.item[pipt.itemCount].bodyLineCount++;
         }
         else if (rawData[0] == CONNECTION_MARK) {
             strcpy(pipt.item[pipt.itemCount].connection[pipt.item[pipt.itemCount].connectionCount], rawData);
@@ -163,14 +162,7 @@ void ConnectItems() {
 //==============================================================
 
 int FindItemHeight(const int itemNumber) {
-    int height = 0;
-    for (int i = 0; i < MAX_ITEM_BODY_LINES; i++) {
-        if (pipt.item[itemNumber].body[i][0] == '\0') {
-            break;
-        }
-        height++;
-    }
-    return height + 2;
+    return pipt.item[itemNumber].bodyLineCount + 2;
 }
 
 int FindItemWidth(const int itemNumber) {
@@ -258,7 +250,7 @@ void PossitionItemsY() {
 
 void PrintItems() {
     for (int i = 0; i <= pipt.itemCount; i++) {
-        printf("\nx:%d y:%d\n", pipt.item[i].x, pipt.item[i].y);
+        printf("\nx:%d y:%d w:%d h:%d blc:%d\n", pipt.item[i].x, pipt.item[i].y, pipt.item[i].width, pipt.item[i].height, pipt.item[i].bodyLineCount);
         for (int j = 0; j < pipt.item[i].connectionCount; j++) {
             printf("connection:%d\n", pipt.item[i].connected[j]);
         }
