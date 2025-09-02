@@ -246,7 +246,7 @@ void PossitionItemsY() {
 
 void PrintItems() {
     for (int i = 0; i <= pipt.itemCount; i++) {
-        printf("\nx:%d y:%d w:%d h:%d blc:%d\n", pipt.item[i].x, pipt.item[i].y, pipt.item[i].width, pipt.item[i].height, pipt.item[i].bodyLineCount);
+        printf("\nx:%d y:%d w:%d h:%d\n", pipt.item[i].x, pipt.item[i].y, pipt.item[i].width, pipt.item[i].height);
         for (int j = 0; j < pipt.item[i].connectionCount; j++) {
             printf("connection:%d\n", pipt.item[i].connected[j]);
         }
