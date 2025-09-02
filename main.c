@@ -129,6 +129,10 @@ void LoadFileData(const char* arg) {
         }
     }
     fclose(file);
+
+    if (pipt.itemCount < 0) {
+        printf("error loading file data, item count:%d\n", pipt.itemCount);
+    }
 }
 
 //==============================================================
@@ -252,10 +256,6 @@ int main(int argc, char* argv[]) {
     if (argvPath != 1) return -1;
 
     LoadFileData(argv[argvPath]);
-    if (pipt.itemCount < 0) {
-        printf("error loading file data, item count:%d\n", pipt.itemCount);
-        return -1;
-    }
 
     ConnectItems();
 
