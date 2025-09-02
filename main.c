@@ -95,10 +95,8 @@ void LoadFileData(const char* arg) {
     pipt.itemCount = -1;
     
     while(fgets(rawData, MAX_ITEM_DATA_LENGTH, file)) {
-        static int lineNumber = 0;
-        lineNumber++;
         if (strlen(rawData) >= MAX_ITEM_DATA_LENGTH - 1) {
-            printf("data overflow on line %d\n", lineNumber);
+            printf("data overflow on line \"%s\"\n", rawData);
             return;
         }
         if (pipt.item[pipt.itemCount].bodyLineCount >= MAX_ITEM_BODY_LINES) {
@@ -120,7 +118,7 @@ void LoadFileData(const char* arg) {
             pipt.item[pipt.itemCount].connectionCount++;
         }
         else {
-            printf("data on line %d could not be prosessed\n", lineNumber);
+            printf("data on line \"%s\" could not be prosessed\n", rawData);
             printf("line must start line with %c : title, %c : body, or %c : connection\n", TITLE_MARK, BODY_MARK, CONNECTION_MARK);
             printf("line data : %s\n", rawData);
             return;
