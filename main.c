@@ -93,7 +93,7 @@ void LoadFileData(const char* arg) {
     }
 
     pipt.itemCount = -1;
-    
+
     while(fgets(rawData, MAX_ITEM_DATA_LENGTH, file)) {
         if (strlen(rawData) >= MAX_ITEM_DATA_LENGTH - 1) {
             printf("data overflow on line \"%s\"\n", rawData);
@@ -108,9 +108,13 @@ void LoadFileData(const char* arg) {
         if (rawData[0] == TITLE_MARK) {
             pipt.itemCount++;
             strcpy(pipt.item[pipt.itemCount].title, rawData);
+            pipt.item[pipt.itemCount].width = strlen(pipt.item[pipt.itemCount].title);
         }
         else if (rawData[0] == BODY_MARK) {
             strcpy(pipt.item[pipt.itemCount].body[pipt.item[pipt.itemCount].bodyLineCount], rawData);
+            if (pipt.item[pipt.itemCount].width < strlen(pipt.item[pipt.itemCount].body[pipt.item[pipt.itemCount].bodyLineCount])) {
+                pipt.item[pipt.itemCount].width = strlen(pipt.item[pipt.itemCount].body[pipt.item[pipt.itemCount].bodyLineCount]);
+            }
             pipt.item[pipt.itemCount].bodyLineCount++;
         }
         else if (rawData[0] == CONNECTION_MARK) {
@@ -159,16 +163,6 @@ void ConnectItems() {
 //  FormatItems
 //==============================================================
 
-int FindItemWidth(const int itemNumber) {
-    long unsigned int width = strlen(pipt.item[itemNumber].title);
-    for (int i = 0; i < pipt.item[itemNumber].bodyLineCount; i++) {
-        if (width < strlen(pipt.item[itemNumber].body[i])) {
-            width = strlen(pipt.item[itemNumber].body[i]);
-        }
-    }
-    return width + 1;
-}
-
 void FormatTop(const int itemNumber) {
     strcpy(pipt.item[itemNumber].top, pipt.item[itemNumber].title);
     pipt.item[itemNumber].top[0] = CORRNER_CHAR;
@@ -201,7 +195,7 @@ void FormatBottom(const int itemNumber) {
 void FormatItems() {
     for (int i = 0; i <= pipt.itemCount; i++) {
         pipt.item[i].height = pipt.item[i].bodyLineCount + 2;
-        pipt.item[i].width = FindItemWidth(i);
+        pipt.item[i].width += 1;
         FormatTop(i);
         FormatBody(i);
         FormatBottom(i);
