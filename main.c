@@ -147,15 +147,11 @@ void FindConnection(const int itemNumber, const int connectionNumber) {
     }
 }
 
-void ConnectConnections(const int itemNumber) {
-    for (int i = 0; i <= pipt.itemCount; i++) {
-        FindConnection(itemNumber, i);
-    }
-}
-
 void ConnectItems() {
     for (int i = 0; i <= pipt.itemCount; i++) {
-        ConnectConnections(i);
+        for (int j = 0; j <= pipt.itemCount; j++) {
+            FindConnection(i, j);
+        }
     }
 }
 
