@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #define MAX_ITEM_DATA_LENGTH 32
 #define MAX_ITEM_COUNT 16
@@ -51,6 +52,7 @@ int StackRemaining(struct stack stack) {
 void StackPush(struct stack* stack, int item){
     if (StackRemaining(*stack) == 0) {
         printf("stack overflow\n");
+        abort();
         return;
     }
     stack->top++;
@@ -60,6 +62,7 @@ void StackPush(struct stack* stack, int item){
 int StackPop(struct stack* stack) {
     if (stack->top < 0) {
         printf("stack underflow\n");
+        abort();
         return -1;
     }
     stack->top--;
@@ -206,27 +209,36 @@ void FormatItems() {
 //  PossitionItems
 //==============================================================
 
+int ValidConnectionY(struct stack* stackY) {
+    for (int i = 0; i < pipt.item[stackY->item[stackY->top]].connectionCount; i++) {
+        if (pipt.item[pipt.item[stackY->item[stackY->top]].connected[i]].y == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+
 void PossitionItemsY() {
     int currentY = 1;
     struct stack stackY;
     stackY.top = -1;
-    stackY.capacity = MAX_ITEM_COUNT;
+    stackY.capacity = pipt.itemCount;
 
     StackPush(&stackY, 0);
     while (stackY.top >= 0) {
-        int connection = -1;
-        if (connection >= 0) {
-            currentY += pipt.item[stackY.top].height + 1;
-            StackPush(&stackY, connection);
+        int connection = ValidConnectionY(&stackY);
+
+        if (connection != -1) {
+            currentY += pipt.item[stackY.item[stackY.top]].height + 1;
+            StackPush(&stackY, pipt.item[stackY.item[stackY.top]].connected[connection]);
         }
-        if (connection == -1) {
-            pipt.item[stackY.top].y = currentY;
-            printf("item: %s, y %d\n", pipt.item[stackY.top].top, pipt.item[stackY.top].y);
-            currentY -= pipt.item[stackY.top].height;
+        else {
+            pipt.item[stackY.item[stackY.top]].y = currentY;
             StackPop(&stackY);
+            currentY -= pipt.item[stackY.item[stackY.top]].height + 1;
         }
     }
-    printf("\n\n");
 }
 
 //==============================================================
@@ -261,7 +273,7 @@ int main(int argc, char* argv[]) {
 
     FormatItems();
 
-    //PossitionItemsY();
+    PossitionItemsY();
 
     PrintItems();
 
