@@ -34,6 +34,8 @@ struct item {
 struct pipt {
     struct item item[MAX_ITEM_COUNT];
     int itemCount;
+    int width;
+    int height;
 };
 struct pipt pipt;
 
@@ -234,6 +236,7 @@ void PossitionItemsX(struct stack* stackX) {
                 pipt.item[stackX->item[stackX->top]].x <= pipt.item[stackX->item[i]].x + pipt.item[stackX->item[i]].width))) {
 
                 pipt.item[stackX->item[stackX->top]].x = pipt.item[stackX->item[i]].x + pipt.item[stackX->item[i]].width + ITEM_GAP;
+                pipt.width = pipt.item[stackX->item[stackX->top]].x + pipt.item[stackX->item[stackX->top]].width + CANVAS_GAP;
             }
         }
         StackPop(stackX);
@@ -264,8 +267,12 @@ void PossitionItemsY() {
         else {
             pipt.item[stackY.item[stackY.top]].y = currentY;
             pipt.item[stackY.item[stackY.top]].x = CANVAS_GAP;
+            pipt.width = pipt.item[stackY.item[stackY.top]].x + pipt.item[stackY.item[stackY.top]].width + CANVAS_GAP;
             StackPop(&stackY);
             currentY -= pipt.item[stackY.item[stackY.top]].height + ITEM_GAP;
+        }
+        if (pipt.height < pipt.item[stackY.item[stackY.top]].y + pipt.item[stackY.item[stackY.top]].height + CANVAS_GAP) {
+            pipt.height = pipt.item[stackY.item[stackY.top]].y + pipt.item[stackY.item[stackY.top]].height + CANVAS_GAP;
         }
     }
     PossitionItemsX(&stackX);
@@ -274,6 +281,10 @@ void PossitionItemsY() {
 //==============================================================
 //  PrintItems
 //==============================================================
+
+void PrintItemsCanvas() {
+    char canvas[(pipt.width + 1) * pipt.height];
+}
 
 void PrintItems() {
     for (int i = 0; i <= pipt.itemCount; i++) {
@@ -287,6 +298,7 @@ void PrintItems() {
         }
         printf("%s\n", pipt.item[i].bottom);
     }
+    printf("w:%d h:%d\n", pipt.width, pipt.height);
 }
 
 //==============================================================
@@ -304,6 +316,8 @@ int main(int argc, char* argv[]) {
     FormatItems();
 
     PossitionItemsY();
+
+    PrintItemsCanvas();
 
     PrintItems();
 
