@@ -218,26 +218,55 @@ int ValidConnectionY(struct stack* stackY) {
     return -1;
 }
 
+void PossitionItemsX(struct stack* stackX) {
+    while (stackX->top >= 0) {
+        for (int i = stackX->top - 1; i >= 0; i--) {
+            if (((pipt.item[stackX->item[i]].y >= pipt.item[stackX->item[stackX->top]].y &&
+                pipt.item[stackX->item[i]].y <= pipt.item[stackX->item[stackX->top]].y + pipt.item[stackX->item[stackX->top]].height) ||
+                (pipt.item[stackX->item[stackX->top]].y >= pipt.item[stackX->item[i]].y &&
+                pipt.item[stackX->item[stackX->top]].y <= pipt.item[stackX->item[i]].y + pipt.item[stackX->item[i]].height))
+                &&
+                ((pipt.item[stackX->item[i]].x >= pipt.item[stackX->item[stackX->top]].x &&
+                pipt.item[stackX->item[i]].x <= pipt.item[stackX->item[stackX->top]].x + pipt.item[stackX->item[stackX->top]].width) ||
+                (pipt.item[stackX->item[stackX->top]].x >= pipt.item[stackX->item[i]].x &&
+                pipt.item[stackX->item[stackX->top]].x <= pipt.item[stackX->item[i]].x + pipt.item[stackX->item[i]].width))) {
+
+                pipt.item[stackX->item[stackX->top]].x = pipt.item[stackX->item[i]].x + pipt.item[stackX->item[i]].width + 1;
+            }
+        }
+        StackPop(stackX);
+    }
+}
+
 void PossitionItemsY() {
     int currentY = 1;
+
     struct stack stackY;
     stackY.top = -1;
     stackY.capacity = pipt.itemCount;
 
+    struct stack stackX;
+    stackX.top = -1;
+    stackX.capacity = pipt.itemCount;
+
+    StackPush(&stackX, 0);
     StackPush(&stackY, 0);
     while (stackY.top >= 0) {
         int connection = ValidConnectionY(&stackY);
 
         if (connection != -1) {
             currentY += pipt.item[stackY.item[stackY.top]].height + 1;
+            StackPush(&stackX, pipt.item[stackY.item[stackY.top]].connected[connection]);
             StackPush(&stackY, pipt.item[stackY.item[stackY.top]].connected[connection]);
         }
         else {
             pipt.item[stackY.item[stackY.top]].y = currentY;
+            pipt.item[stackY.item[stackY.top]].x = 1;
             StackPop(&stackY);
             currentY -= pipt.item[stackY.item[stackY.top]].height + 1;
         }
     }
+    PossitionItemsX(&stackX);
 }
 
 //==============================================================
