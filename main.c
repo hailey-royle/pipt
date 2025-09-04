@@ -236,8 +236,10 @@ void PossitionItemsX(struct stack* stackX) {
                 pipt.item[stackX->item[stackX->top]].x <= pipt.item[stackX->item[i]].x + pipt.item[stackX->item[i]].width))) {
 
                 pipt.item[stackX->item[stackX->top]].x = pipt.item[stackX->item[i]].x + pipt.item[stackX->item[i]].width + ITEM_GAP;
-                pipt.width = pipt.item[stackX->item[stackX->top]].x + pipt.item[stackX->item[stackX->top]].width + CANVAS_GAP;
             }
+        }
+        if (pipt.width < pipt.item[stackX->item[stackX->top]].x + pipt.item[stackX->item[stackX->top]].width + CANVAS_GAP) {
+            pipt.width = pipt.item[stackX->item[stackX->top]].x + pipt.item[stackX->item[stackX->top]].width + CANVAS_GAP;
         }
         StackPop(stackX);
     }
@@ -267,7 +269,6 @@ void PossitionItemsY() {
         else {
             pipt.item[stackY.item[stackY.top]].y = currentY;
             pipt.item[stackY.item[stackY.top]].x = CANVAS_GAP;
-            pipt.width = pipt.item[stackY.item[stackY.top]].x + pipt.item[stackY.item[stackY.top]].width + CANVAS_GAP;
             StackPop(&stackY);
             currentY -= pipt.item[stackY.item[stackY.top]].height + ITEM_GAP;
         }
