@@ -1,5 +1,3 @@
 #!/bin/bash
 
-make
-./pipt testmd/$1.md
-
+make && ./pipt testmd/$1.md && rm pipt
