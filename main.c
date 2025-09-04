@@ -13,6 +13,8 @@
 #define VERTICAL_CHAR '|'
 #define SPACE_CHAR ' '
 #define BACKGROUND_CHAR '.'
+#define CANVAS_GAP 1
+#define ITEM_GAP 1
 
 struct item {
     char connection[MAX_ITEM_COUNT][MAX_ITEM_DATA_LENGTH];
@@ -231,7 +233,7 @@ void PossitionItemsX(struct stack* stackX) {
                 (pipt.item[stackX->item[stackX->top]].x >= pipt.item[stackX->item[i]].x &&
                 pipt.item[stackX->item[stackX->top]].x <= pipt.item[stackX->item[i]].x + pipt.item[stackX->item[i]].width))) {
 
-                pipt.item[stackX->item[stackX->top]].x = pipt.item[stackX->item[i]].x + pipt.item[stackX->item[i]].width + 1;
+                pipt.item[stackX->item[stackX->top]].x = pipt.item[stackX->item[i]].x + pipt.item[stackX->item[i]].width + ITEM_GAP;
             }
         }
         StackPop(stackX);
@@ -239,7 +241,7 @@ void PossitionItemsX(struct stack* stackX) {
 }
 
 void PossitionItemsY() {
-    int currentY = 1;
+    int currentY = CANVAS_GAP;
 
     struct stack stackY;
     stackY.top = -1;
@@ -255,15 +257,15 @@ void PossitionItemsY() {
         int connection = ValidConnectionY(&stackY);
 
         if (connection != -1) {
-            currentY += pipt.item[stackY.item[stackY.top]].height + 1;
+            currentY += pipt.item[stackY.item[stackY.top]].height + ITEM_GAP;
             StackPush(&stackX, pipt.item[stackY.item[stackY.top]].connected[connection]);
             StackPush(&stackY, pipt.item[stackY.item[stackY.top]].connected[connection]);
         }
         else {
             pipt.item[stackY.item[stackY.top]].y = currentY;
-            pipt.item[stackY.item[stackY.top]].x = 1;
+            pipt.item[stackY.item[stackY.top]].x = CANVAS_GAP;
             StackPop(&stackY);
-            currentY -= pipt.item[stackY.item[stackY.top]].height + 1;
+            currentY -= pipt.item[stackY.item[stackY.top]].height + ITEM_GAP;
         }
     }
     PossitionItemsX(&stackX);
