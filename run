@@ -1,5 +1,5 @@
 #!/bin/bash
 
 make
-./pipt $1
+./pipt testmd/$1.md
 
