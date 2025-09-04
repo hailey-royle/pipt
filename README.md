@@ -7,13 +7,15 @@ Generate a fancy terminal graph from a subset of markdown
 
 ### input
 
-`# box  
-`  
-`> what is a box  
-`> i dont know  
-`> its for cats or smt  
-`  
-`- cat  
+```
+# box  
+  
+> what is a box  
+> i dont know  
+> its for cats or smt  
+ 
+- cat  
+```
 
 ### output  
 
