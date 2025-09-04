@@ -7,23 +7,23 @@ Generate a fancy terminal graph from a subset of markdown
 
 ### input
 
-`# box
-`
-`> what is a box
-`> i dont know
-`> its for cats or smt
-`
-`- cat
+`# box  
+`  
+`> what is a box  
+`> i dont know  
+`> its for cats or smt  
+`  
+`- cat  
 
-### output
+### output  
 
-.........................
-.+-box-----------------+.
-.| what is a box       |.
-.| i dont know         |.
-.| its for cats or smt |.
-.+---------------------+.
-.........................
+.........................  
+.+-box-----------------+.  
+.| what is a box       |.  
+.| i dont know         |.  
+.| its for cats or smt |.  
+.+---------------------+.  
+.........................  
 (not shown: arrow to box 'cat')  
 
 the title is marked with a single #  
