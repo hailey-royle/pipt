@@ -280,26 +280,35 @@ void PossitionItemsY() {
 }
 
 //==============================================================
-//  PrintItems
+//  Canvas
 //==============================================================
 
-void PrintItemsCanvas() {
-    char canvas[(pipt.width + 1) * pipt.height];
-}
+void DrawCanvas() {
+    pipt.width += 1;
+    char canvas[pipt.width * pipt.height];
 
-void PrintItems() {
-    for (int i = 0; i <= pipt.itemCount; i++) {
-        printf("\nx:%d y:%d w:%d h:%d\n", pipt.item[i].x, pipt.item[i].y, pipt.item[i].width, pipt.item[i].height);
-        for (int j = 0; j < pipt.item[i].connectionCount; j++) {
-            printf("connection:%d\n", pipt.item[i].connected[j]);
-        }
-        printf("%s\n", pipt.item[i].top);
-        for (int j = 0; j < pipt.item[i].height - 2; j++) {
-            printf("%s\n", pipt.item[i].body[j]);
-        }
-        printf("%s\n", pipt.item[i].bottom);
+    for (int i = 0; i < pipt.width * pipt.height; i++) {
+        canvas[i] = BACKGROUND_CHAR;
     }
-    printf("w:%d h:%d\n", pipt.width, pipt.height);
+    for (int i = pipt.width - 1; i < pipt.width * pipt.height; i += pipt.width) {
+        canvas[i] = '\n';
+    }
+    canvas[(pipt.width * pipt.height) - 1] = '\0';
+
+    for (int i = 0; i <= pipt.itemCount; i++) {
+        for (int j = 0; j <= pipt.item[i].width - 1; j++) {
+            canvas[((pipt.item[i].y * pipt.width) + pipt.item[i].x) + j] = pipt.item[i].top[j];
+        }
+        for (int j = 0; j <= pipt.item[i].bodyLineCount; j++) {
+            for (int k = 0; k <= pipt.item[i].width - 1; k++) {
+                canvas[(((pipt.item[i].y + pipt.item[i].bodyLineCount + 1 - j) * pipt.width) + pipt.item[i].x) + k] = pipt.item[i].body[j - 1][k];
+            }
+        }
+        for (int j = 0; j <= pipt.item[i].width - 1; j++) {
+            canvas[(((pipt.item[i].y + pipt.item[i].bodyLineCount + 1) * pipt.width) + pipt.item[i].x) + j] = pipt.item[i].bottom[j];
+        }
+    }
+    printf("%s\n", canvas);
 }
 
 //==============================================================
@@ -318,9 +327,7 @@ int main(int argc, char* argv[]) {
 
     PossitionItemsY();
 
-    PrintItemsCanvas();
-
-    PrintItems();
+    DrawCanvas();
 
     return 0;
 }
