@@ -19,6 +19,7 @@ Generate a fancy terminal graph from a subset of markdown
 
 ### output  
 
+```
 .........................  
 .+-box-----------------+.  
 .| what is a box       |.  
@@ -26,6 +27,7 @@ Generate a fancy terminal graph from a subset of markdown
 .| its for cats or smt |.  
 .+---------------------+.  
 .........................  
+```
 (not shown: arrow to box 'cat')  
 
 the title is marked with a single #  
