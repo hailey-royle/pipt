@@ -6,12 +6,12 @@ Generate a fancy terminal graph from a subset of markdown
 ## syntax
 
 `# box
-
-> what is a box
-> i dont know
-> its for cats or smt
-
-- cat`
+`
+`> what is a box
+`> i dont know
+`> its for cats or smt
+`
+`- cat
 
 the title is marked with a single #  
 the body is marked with >  
