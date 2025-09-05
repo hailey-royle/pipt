@@ -210,9 +210,9 @@ void FormatItems() {
 //  PossitionItems
 //==============================================================
 
-int ValidConnectionY(struct stack* stackY) {
-    for (int i = 0; i < pipt.item[stackY->item[stackY->top]].connectionCount; i++) {
-        if (pipt.item[pipt.item[stackY->item[stackY->top]].connected[i]].y == 0) {
+int ValidConnectionY() {
+    for (int i = 0; i < pipt.item[stackY.item[stackY.top]].connectionCount; i++) {
+        if (pipt.item[pipt.item[stackY.item[stackY.top]].connected[i]].y == 0) {
             return i;
         }
     }
@@ -254,7 +254,7 @@ void PossitionItemsY() {
     StackPush(&stackX, 0);
     StackPush(&stackY, 0);
     while (stackY.top >= 0) {
-        int connection = ValidConnectionY(&stackY);
+        int connection = ValidConnectionY(stackY);
 
         if (connection != -1) {
             currentY += pipt.item[stackY.item[stackY.top]].height + ITEM_GAP;
