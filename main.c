@@ -219,26 +219,26 @@ int ValidConnectionY() {
     return -1;
 }
 
-void PossitionItemsX(struct stack* stackX) {
-    while (stackX->top >= 0) {
-        for (int i = stackX->top - 1; i >= 0; i--) {
-            if (((pipt.item[stackX->item[i]].y >= pipt.item[stackX->item[stackX->top]].y &&
-                pipt.item[stackX->item[i]].y <= pipt.item[stackX->item[stackX->top]].y + pipt.item[stackX->item[stackX->top]].height) ||
-                (pipt.item[stackX->item[stackX->top]].y >= pipt.item[stackX->item[i]].y &&
-                pipt.item[stackX->item[stackX->top]].y <= pipt.item[stackX->item[i]].y + pipt.item[stackX->item[i]].height))
+void PossitionItemsX() {
+    while (stackX.top >= 0) {
+        for (int i = stackX.top - 1; i >= 0; i--) {
+            if (((pipt.item[stackX.item[i]].y >= pipt.item[stackX.item[stackX.top]].y &&
+                pipt.item[stackX.item[i]].y <= pipt.item[stackX.item[stackX.top]].y + pipt.item[stackX.item[stackX.top]].height) ||
+                (pipt.item[stackX.item[stackX.top]].y >= pipt.item[stackX.item[i]].y &&
+                pipt.item[stackX.item[stackX.top]].y <= pipt.item[stackX.item[i]].y + pipt.item[stackX.item[i]].height))
                 &&
-                ((pipt.item[stackX->item[i]].x >= pipt.item[stackX->item[stackX->top]].x &&
-                pipt.item[stackX->item[i]].x <= pipt.item[stackX->item[stackX->top]].x + pipt.item[stackX->item[stackX->top]].width) ||
-                (pipt.item[stackX->item[stackX->top]].x >= pipt.item[stackX->item[i]].x &&
-                pipt.item[stackX->item[stackX->top]].x <= pipt.item[stackX->item[i]].x + pipt.item[stackX->item[i]].width))) {
+                ((pipt.item[stackX.item[i]].x >= pipt.item[stackX.item[stackX.top]].x &&
+                pipt.item[stackX.item[i]].x <= pipt.item[stackX.item[stackX.top]].x + pipt.item[stackX.item[stackX.top]].width) ||
+                (pipt.item[stackX.item[stackX.top]].x >= pipt.item[stackX.item[i]].x &&
+                pipt.item[stackX.item[stackX.top]].x <= pipt.item[stackX.item[i]].x + pipt.item[stackX.item[i]].width))) {
 
-                pipt.item[stackX->item[stackX->top]].x = pipt.item[stackX->item[i]].x + pipt.item[stackX->item[i]].width + ITEM_GAP;
+                pipt.item[stackX.item[stackX.top]].x = pipt.item[stackX.item[i]].x + pipt.item[stackX.item[i]].width + ITEM_GAP;
             }
         }
-        if (pipt.width < pipt.item[stackX->item[stackX->top]].x + pipt.item[stackX->item[stackX->top]].width + CANVAS_GAP) {
-            pipt.width = pipt.item[stackX->item[stackX->top]].x + pipt.item[stackX->item[stackX->top]].width + CANVAS_GAP;
+        if (pipt.width < pipt.item[stackX.item[stackX.top]].x + pipt.item[stackX.item[stackX.top]].width + CANVAS_GAP) {
+            pipt.width = pipt.item[stackX.item[stackX.top]].x + pipt.item[stackX.item[stackX.top]].width + CANVAS_GAP;
         }
-        StackPop(stackX);
+        StackPop(&stackX);
     }
 }
 
