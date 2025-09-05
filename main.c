@@ -54,7 +54,7 @@ struct stack stackX;
 void StackPush(struct stack* stack, int item){
     if ((stack->capacity - stack->top) == 0) {
         printf("stack overflow\n");
-        abort();
+        exit(1);
         return;
     }
     stack->top++;
@@ -64,7 +64,7 @@ void StackPush(struct stack* stack, int item){
 void StackPop(struct stack* stack) {
     if (stack->top < 0) {
         printf("stack underflow\n");
-        abort();
+        exit(1);
         return;
     }
     stack->top--;
@@ -77,10 +77,12 @@ void StackPop(struct stack* stack) {
 int VerifyArgs(const int argc) {
     if (argc < 2) {
         printf("no arguments given\n");
+        exit(1);
         return -1;
     }
     else if (argc > 2) {
         printf("too many arguments\n");
+        exit(1);
         return -1;
     }
     return 1;
@@ -93,6 +95,7 @@ void LoadFileData(const char* arg) {
 
     if (file == NULL) {
         printf("file %s not found\n", arg);
+        exit(1);
         return;
     }
 
