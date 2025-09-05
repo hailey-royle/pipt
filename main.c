@@ -72,15 +72,6 @@ void StackPop(struct stack* stack) {
     stack->top--;
 }
 
-int StackPeek(struct stack* stack) {
-    if (stack->top < 0) {
-        printf("stack underflow\n");
-        abort();
-        return -1;
-    }
-    return stack->top;
-}
-
 //==============================================================
 //  Input
 //==============================================================
