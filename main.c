@@ -44,6 +44,8 @@ struct stack {
     int capacity;
     int item[MAX_ITEM_COUNT];
 };
+struct stack stackY;
+struct stack stackX;
 
 //==============================================================
 //  Stack
@@ -243,11 +245,9 @@ void PossitionItemsX(struct stack* stackX) {
 void PossitionItemsY() {
     int currentY = CANVAS_GAP;
 
-    struct stack stackY;
     stackY.top = -1;
     stackY.capacity = pipt.itemCount;
 
-    struct stack stackX;
     stackX.top = -1;
     stackX.capacity = pipt.itemCount;
 
