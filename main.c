@@ -63,13 +63,21 @@ void StackPush(struct stack* stack, int item){
     stack->item[stack->top] = item;
 }
 
-int StackPop(struct stack* stack) {
+void StackPop(struct stack* stack) {
+    if (stack->top < 0) {
+        printf("stack underflow\n");
+        abort();
+        return;
+    }
+    stack->top--;
+}
+
+int StackPeek(struct stack* stack) {
     if (stack->top < 0) {
         printf("stack underflow\n");
         abort();
         return -1;
     }
-    stack->top--;
     return stack->top;
 }
 
