@@ -49,12 +49,8 @@ struct stack {
 //  Stack
 //==============================================================
 
-int StackRemaining(struct stack stack) {
-    return stack.capacity - stack.top;
-}
-
 void StackPush(struct stack* stack, int item){
-    if (StackRemaining(*stack) == 0) {
+    if ((stack->capacity - stack->top) == 0) {
         printf("stack overflow\n");
         abort();
         return;
