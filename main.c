@@ -314,10 +314,9 @@ void DrawCanvas() {
 //==============================================================
 
 int main(int argc, char* argv[]) {
-    const int argvPath = VerifyArgs(argc);
-    if (argvPath != 1) return -1;
+    VerifyArgs(argc);
 
-    LoadFileData(argv[argvPath]);
+    LoadFileData(argv[1]);
 
     ConnectItems();
 
