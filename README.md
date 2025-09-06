@@ -17,11 +17,6 @@ Generate a fancy terminal graph from a subset of markdown
 - cat  
 
 # cat  
-  
-> its a cat
-> its for cats or smt  
- 
-- cat  
 
 >   /\_/\
 >  ( o.o )
