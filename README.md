@@ -15,6 +15,18 @@ Generate a fancy terminal graph from a subset of markdown
 > its for cats or smt  
  
 - cat  
+
+# cat  
+  
+> its a cat
+> its for cats or smt  
+ 
+- cat  
+
+>   /\_/\
+>  ( o.o )
+>   > ^ <
+
 ```
 
 ### output  
@@ -26,9 +38,19 @@ Generate a fancy terminal graph from a subset of markdown
 .| i dont know         |.  
 .| its for cats or smt |.  
 .+---------------------+.  
-.........................  
+......|..................  
+......v..................  
+.+---------+.............
+.|  /\_/\  |.............
+.| ( o.o ) |.............
+.|  > ^ <  |.............
+.+---------+.............
+.........................
 ```
-(not shown: arrow to box 'cat')  
+
+(arrow not yet implemented)
+
+---
 
 the title is marked with a single #  
 the body is marked with >  
