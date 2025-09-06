@@ -249,6 +249,7 @@ void PossitionItemsX() {
         for (int i = stackX.top - 1; i >= 0; i--) {
             if (CollisionCheck(i)) {
                 pipt.item[stackX.item[stackX.top]].x = pipt.item[stackX.item[i]].x + pipt.item[stackX.item[i]].width + ITEM_GAP;
+                i = 0;
             }
         }
         if (pipt.width < pipt.item[stackX.item[stackX.top]].x + pipt.item[stackX.item[stackX.top]].width + CANVAS_GAP) {
