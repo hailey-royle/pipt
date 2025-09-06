@@ -257,7 +257,7 @@ void PossitionItemsY() {
     StackPush(&stackX, 0);
     StackPush(&stackY, 0);
     while (stackY.top >= 0) {
-        int connection = ValidConnectionY(stackY);
+        int connection = ValidConnectionY();
 
         if (connection != -1) {
             currentY += pipt.item[stackY.item[stackY.top]].height + ITEM_GAP;
@@ -274,7 +274,7 @@ void PossitionItemsY() {
             pipt.height = pipt.item[stackY.item[stackY.top]].y + pipt.item[stackY.item[stackY.top]].height + CANVAS_GAP;
         }
     }
-    PossitionItemsX(&stackX);
+    PossitionItemsX();
 }
 
 //==============================================================
