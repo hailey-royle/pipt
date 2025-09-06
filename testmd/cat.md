@@ -1,13 +1,13 @@
-# box  
+# box
 
 > what is a box  
 > i dont know  
 > its for cats or smt  
 
-- cat  
+- cat
 
-# cat  
+# cat
 
->   /\_/\
->  ( o.o )
->   > ^ <
+>  /\_/\
+> ( o.o )
+>  > ^ <
