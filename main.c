@@ -287,6 +287,16 @@ void PossitionItemsY() {
 //  Canvas
 //==============================================================
 
+void SetupCanvas(char* canvas) {
+    for (int i = 0; i < pipt.width * pipt.height; i++) {
+        canvas[i] = BACKGROUND_CHAR;
+    }
+    for (int i = pipt.width - 1; i < pipt.width * pipt.height; i += pipt.width) {
+        canvas[i] = '\n';
+    }
+    canvas[(pipt.width * pipt.height) - 1] = '\0';
+}
+
 void DrawItem(char* canvas, const int i) {
     for (int j = 0; j < pipt.item[i].width; j++) {
         canvas[(pipt.item[i].y * pipt.width) + pipt.item[i].x + j] = pipt.item[i].top[j];
@@ -304,15 +314,7 @@ void DrawItem(char* canvas, const int i) {
 void DrawCanvas() {
     pipt.width += 1;
     char canvas[pipt.width * pipt.height];
-
-    for (int i = 0; i < pipt.width * pipt.height; i++) {
-        canvas[i] = BACKGROUND_CHAR;
-    }
-    for (int i = pipt.width - 1; i < pipt.width * pipt.height; i += pipt.width) {
-        canvas[i] = '\n';
-    }
-    canvas[(pipt.width * pipt.height) - 1] = '\0';
-
+    SetupCanvas(canvas);
     for (int i = 0; i <= pipt.itemCount; i++) {
         DrawItem(canvas, i);
     }
