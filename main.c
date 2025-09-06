@@ -297,9 +297,9 @@ void DrawCanvas() {
         for (int j = 0; j <= pipt.item[i].width - 1; j++) {
             canvas[((pipt.item[i].y * pipt.width) + pipt.item[i].x) + j] = pipt.item[i].top[j];
         }
-        for (int j = 0; j <= pipt.item[i].bodyLineCount; j++) {
+        for (int j = 0; j < pipt.item[i].bodyLineCount; j++) {
             for (int k = 0; k <= pipt.item[i].width - 1; k++) {
-                canvas[(((pipt.item[i].y + pipt.item[i].bodyLineCount + 1 - j) * pipt.width) + pipt.item[i].x) + k] = pipt.item[i].body[j - 1][k];
+                canvas[(((pipt.item[i].y + pipt.item[i].bodyLineCount + j - 2) * pipt.width) + pipt.item[i].x) + k] = pipt.item[i].body[j][k];
             }
         }
         for (int j = 0; j <= pipt.item[i].width - 1; j++) {
