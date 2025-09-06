@@ -55,7 +55,6 @@ void StackPush(struct stack* stack, int item){
     if ((stack->capacity - stack->top) == 0) {
         printf("stack overflow\n");
         exit(1);
-        return;
     }
     stack->top++;
     stack->item[stack->top] = item;
@@ -65,7 +64,6 @@ void StackPop(struct stack* stack) {
     if (stack->top < 0) {
         printf("stack underflow\n");
         exit(1);
-        return;
     }
     stack->top--;
 }
@@ -93,7 +91,6 @@ void LoadFileData(const char* arg) {
     if (file == NULL) {
         printf("file %s not found\n", arg);
         exit(1);
-        return;
     }
 
     pipt.itemCount = -1;
