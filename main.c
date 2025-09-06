@@ -220,19 +220,27 @@ int ValidConnectionY() {
     return -1;
 }
 
+int CollisionCheck(const int i) {
+    if (((pipt.item[stackX.item[i]].y >= pipt.item[stackX.item[stackX.top]].y &&
+    pipt.item[stackX.item[i]].y <= pipt.item[stackX.item[stackX.top]].y + pipt.item[stackX.item[stackX.top]].height) ||
+    (pipt.item[stackX.item[stackX.top]].y >= pipt.item[stackX.item[i]].y &&
+    pipt.item[stackX.item[stackX.top]].y <= pipt.item[stackX.item[i]].y + pipt.item[stackX.item[i]].height))
+    &&
+    ((pipt.item[stackX.item[i]].x >= pipt.item[stackX.item[stackX.top]].x &&
+    pipt.item[stackX.item[i]].x <= pipt.item[stackX.item[stackX.top]].x + pipt.item[stackX.item[stackX.top]].width) ||
+    (pipt.item[stackX.item[stackX.top]].x >= pipt.item[stackX.item[i]].x &&
+    pipt.item[stackX.item[stackX.top]].x <= pipt.item[stackX.item[i]].x + pipt.item[stackX.item[i]].width))) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
+
 void PossitionItemsX() {
     while (stackX.top >= 0) {
         for (int i = stackX.top - 1; i >= 0; i--) {
-            if (((pipt.item[stackX.item[i]].y >= pipt.item[stackX.item[stackX.top]].y &&
-                pipt.item[stackX.item[i]].y <= pipt.item[stackX.item[stackX.top]].y + pipt.item[stackX.item[stackX.top]].height) ||
-                (pipt.item[stackX.item[stackX.top]].y >= pipt.item[stackX.item[i]].y &&
-                pipt.item[stackX.item[stackX.top]].y <= pipt.item[stackX.item[i]].y + pipt.item[stackX.item[i]].height))
-                &&
-                ((pipt.item[stackX.item[i]].x >= pipt.item[stackX.item[stackX.top]].x &&
-                pipt.item[stackX.item[i]].x <= pipt.item[stackX.item[stackX.top]].x + pipt.item[stackX.item[stackX.top]].width) ||
-                (pipt.item[stackX.item[stackX.top]].x >= pipt.item[stackX.item[i]].x &&
-                pipt.item[stackX.item[stackX.top]].x <= pipt.item[stackX.item[i]].x + pipt.item[stackX.item[i]].width))) {
-
+            if (CollisionCheck(i)) {
                 pipt.item[stackX.item[stackX.top]].x = pipt.item[stackX.item[i]].x + pipt.item[stackX.item[i]].width + ITEM_GAP;
             }
         }
