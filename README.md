@@ -8,19 +8,19 @@ Generate a fancy terminal graph from a subset of markdown
 ### input
 
 ```
-# box  
+# box
   
 > what is a box  
 > i dont know  
 > its for cats or smt  
  
-- cat  
+- cat
 
-# cat  
+# cat
 
->   /\_/\
->  ( o.o )
->   > ^ <
+>  /\_/\
+> ( o.o )
+>  > ^ <
 
 ```
 
