@@ -136,6 +136,7 @@ void LoadFileData(const char* arg) {
 
     if (pipt.itemCount < 0) {
         printf("error loading file data, item count:%d\n", pipt.itemCount);
+        exit(1);
     }
 }
 
