@@ -74,18 +74,15 @@ void StackPop(struct stack* stack) {
 //  Input
 //==============================================================
 
-int VerifyArgs(const int argc) {
+void VerifyArgs(const int argc) {
     if (argc < 2) {
         printf("no arguments given\n");
         exit(1);
-        return -1;
     }
-    else if (argc > 2) {
+    if (argc > 2) {
         printf("too many arguments\n");
         exit(1);
-        return -1;
     }
-    return 1;
 }
 
 void LoadFileData(const char* arg) {
