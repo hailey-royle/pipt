@@ -211,6 +211,13 @@ void FormatItems() {
 //  PossitionItems
 //==============================================================
 
+void SetupStacks() {
+    stackY.top = -1;
+    stackY.capacity = pipt.itemCount;
+    stackX.top = -1;
+    stackX.capacity = pipt.itemCount;
+}
+
 int ValidConnectionY() {
     for (int i = 0; i < pipt.item[stackY.item[stackY.top]].connectionCount; i++) {
         if (pipt.item[pipt.item[stackY.item[stackY.top]].connected[i]].y == 0) {
@@ -252,14 +259,8 @@ void PossitionItemsX() {
 }
 
 void PossitionItemsY() {
+    SetupStacks();
     int currentY = CANVAS_GAP;
-
-    stackY.top = -1;
-    stackY.capacity = pipt.itemCount;
-
-    stackX.top = -1;
-    stackX.capacity = pipt.itemCount;
-
     StackPush(&stackX, 0);
     StackPush(&stackY, 0);
     while (stackY.top >= 0) {
