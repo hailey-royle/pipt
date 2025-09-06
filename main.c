@@ -287,6 +287,20 @@ void PossitionItemsY() {
 //  Canvas
 //==============================================================
 
+void DrawItem(char* canvas, const int i) {
+    for (int j = 0; j < pipt.item[i].width; j++) {
+        canvas[(pipt.item[i].y * pipt.width) + pipt.item[i].x + j] = pipt.item[i].top[j];
+    }
+    for (int j = 0; j < pipt.item[i].bodyLineCount; j++) {
+        for (int k = 0; k < pipt.item[i].width; k++) {
+            canvas[((pipt.item[i].y + j + 1) * pipt.width) + pipt.item[i].x + k] = pipt.item[i].body[j][k];
+        }
+    }
+    for (int j = 0; j < pipt.item[i].width; j++) {
+        canvas[((pipt.item[i].y + pipt.item[i].bodyLineCount + 1) * pipt.width) + pipt.item[i].x + j] = pipt.item[i].bottom[j];
+    }
+}
+
 void DrawCanvas() {
     pipt.width += 1;
     char canvas[pipt.width * pipt.height];
@@ -300,17 +314,7 @@ void DrawCanvas() {
     canvas[(pipt.width * pipt.height) - 1] = '\0';
 
     for (int i = 0; i <= pipt.itemCount; i++) {
-        for (int j = 0; j < pipt.item[i].width; j++) {
-            canvas[(pipt.item[i].y * pipt.width) + pipt.item[i].x + j] = pipt.item[i].top[j];
-        }
-        for (int j = 0; j < pipt.item[i].bodyLineCount; j++) {
-            for (int k = 0; k < pipt.item[i].width; k++) {
-                canvas[((pipt.item[i].y + j + 1) * pipt.width) + pipt.item[i].x + k] = pipt.item[i].body[j][k];
-            }
-        }
-        for (int j = 0; j < pipt.item[i].width; j++) {
-            canvas[((pipt.item[i].y + pipt.item[i].bodyLineCount + 1) * pipt.width) + pipt.item[i].x + j] = pipt.item[i].bottom[j];
-        }
+        DrawItem(canvas, i);
     }
     printf("%s\n", canvas);
 }
