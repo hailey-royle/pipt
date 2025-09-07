@@ -23,8 +23,10 @@ struct item {
     char top[MAX_ITEM_DATA_LENGTH];
     char bottom[MAX_ITEM_DATA_LENGTH];
     int connected[MAX_ITEM_COUNT];
-    int width;
-    int height;
+    int itemW;
+    int itemH;
+    int totalW;
+    int totalH;
     int x;
     int y;
     int connectionCount;
@@ -34,8 +36,6 @@ struct item {
 struct pipt {
     struct item item[MAX_ITEM_COUNT];
     int itemCount;
-    int width;
-    int height;
 };
 struct pipt pipt;
 
@@ -109,12 +109,12 @@ void LoadFileData(const char* arg) {
         if (rawData[0] == TITLE_MARK) {
             pipt.itemCount++;
             strcpy(pipt.item[pipt.itemCount].title, rawData);
-            pipt.item[pipt.itemCount].width = strlen(pipt.item[pipt.itemCount].title);
+            pipt.item[pipt.itemCount].itemW = strlen(pipt.item[pipt.itemCount].title);
         }
         else if (rawData[0] == BODY_MARK) {
             strcpy(pipt.item[pipt.itemCount].body[pipt.item[pipt.itemCount].bodyLineCount], rawData);
-            if (pipt.item[pipt.itemCount].width < strlen(pipt.item[pipt.itemCount].body[pipt.item[pipt.itemCount].bodyLineCount])) {
-                pipt.item[pipt.itemCount].width = strlen(pipt.item[pipt.itemCount].body[pipt.item[pipt.itemCount].bodyLineCount]);
+            if (pipt.item[pipt.itemCount].itemW < strlen(pipt.item[pipt.itemCount].body[pipt.item[pipt.itemCount].bodyLineCount])) {
+                pipt.item[pipt.itemCount].itemW = strlen(pipt.item[pipt.itemCount].body[pipt.item[pipt.itemCount].bodyLineCount]);
             }
             pipt.item[pipt.itemCount].bodyLineCount++;
         }
@@ -169,35 +169,35 @@ void FormatTop(const int itemNumber) {
     strcpy(pipt.item[itemNumber].top, pipt.item[itemNumber].title);
     pipt.item[itemNumber].top[0] = CORRNER_CHAR;
     pipt.item[itemNumber].top[1] = HORIZONTAL_CHAR;
-    for (int i = strlen(pipt.item[itemNumber].top) - 1; i <= pipt.item[itemNumber].width - 2; i++) {
+    for (int i = strlen(pipt.item[itemNumber].top) - 1; i <= pipt.item[itemNumber].itemW - 2; i++) {
         pipt.item[itemNumber].top[i] = HORIZONTAL_CHAR;
     }
-    pipt.item[itemNumber].top[pipt.item[itemNumber].width - 1] = CORRNER_CHAR;
+    pipt.item[itemNumber].top[pipt.item[itemNumber].itemW - 1] = CORRNER_CHAR;
 }
 
 void FormatBody(const int itemNumber) {
-    for (int i = 0; i <= pipt.item[itemNumber].height - 2; i++) {
+    for (int i = 0; i <= pipt.item[itemNumber].itemH - 2; i++) {
         pipt.item[itemNumber].body[i][0] = VERTICAL_CHAR;
         pipt.item[itemNumber].body[i][1] = SPACE_CHAR;
-        for (int j = strlen(pipt.item[itemNumber].body[i]) - 1; j <= pipt.item[itemNumber].width - 2; j++) {
+        for (int j = strlen(pipt.item[itemNumber].body[i]) - 1; j <= pipt.item[itemNumber].itemW - 2; j++) {
             pipt.item[itemNumber].body[i][j] = SPACE_CHAR;
         }
-        pipt.item[itemNumber].body[i][pipt.item[itemNumber].width - 1] = VERTICAL_CHAR;
+        pipt.item[itemNumber].body[i][pipt.item[itemNumber].itemW - 1] = VERTICAL_CHAR;
     }
 }
 
 void FormatBottom(const int itemNumber) {
     pipt.item[itemNumber].bottom[0] = CORRNER_CHAR;
-    for (int i = 1; i <= pipt.item[itemNumber].width - 2; i++) {
+    for (int i = 1; i <= pipt.item[itemNumber].itemW - 2; i++) {
         pipt.item[itemNumber].bottom[i] = HORIZONTAL_CHAR;
     }
-    pipt.item[itemNumber].bottom[pipt.item[itemNumber].width - 1] = CORRNER_CHAR;
+    pipt.item[itemNumber].bottom[pipt.item[itemNumber].itemW - 1] = CORRNER_CHAR;
 }
 
 void FormatItems() {
     for (int i = 0; i <= pipt.itemCount; i++) {
-        pipt.item[i].height = pipt.item[i].bodyLineCount + 2;
-        pipt.item[i].width += 1;
+        pipt.item[i].itemH = pipt.item[i].bodyLineCount + 2;
+        pipt.item[i].itemW += 1;
         FormatTop(i);
         FormatBody(i);
         FormatBottom(i);
@@ -205,119 +205,10 @@ void FormatItems() {
 }
 
 //==============================================================
-//  PossitionItems
+//  SizeItems
 //==============================================================
 
-void SetupStacks() {
-    stackY.top = -1;
-    stackY.capacity = pipt.itemCount;
-    stackX.top = -1;
-    stackX.capacity = pipt.itemCount;
-}
-
-int ValidConnectionY() {
-    for (int i = 0; i < pipt.item[stackY.item[stackY.top]].connectionCount; i++) {
-        if (pipt.item[pipt.item[stackY.item[stackY.top]].connected[i]].y == 0) {
-            return i;
-        }
-    }
-    return -1;
-}
-
-int CollisionCheck(const int i) {
-    if (((pipt.item[stackX.item[i]].y >= pipt.item[stackX.item[stackX.top]].y &&
-    pipt.item[stackX.item[i]].y <= pipt.item[stackX.item[stackX.top]].y + pipt.item[stackX.item[stackX.top]].height) ||
-    (pipt.item[stackX.item[stackX.top]].y >= pipt.item[stackX.item[i]].y &&
-    pipt.item[stackX.item[stackX.top]].y <= pipt.item[stackX.item[i]].y + pipt.item[stackX.item[i]].height))
-    &&
-    ((pipt.item[stackX.item[i]].x >= pipt.item[stackX.item[stackX.top]].x &&
-    pipt.item[stackX.item[i]].x <= pipt.item[stackX.item[stackX.top]].x + pipt.item[stackX.item[stackX.top]].width) ||
-    (pipt.item[stackX.item[stackX.top]].x >= pipt.item[stackX.item[i]].x &&
-    pipt.item[stackX.item[stackX.top]].x <= pipt.item[stackX.item[i]].x + pipt.item[stackX.item[i]].width))) {
-        return 1;
-    }
-    else {
-        return 0;
-    }
-}
-
-void PossitionItemsX() {
-    while (stackX.top >= 0) {
-        for (int i = stackX.top - 1; i >= 0; i--) {
-            if (CollisionCheck(i)) {
-                pipt.item[stackX.item[stackX.top]].x = pipt.item[stackX.item[i]].x + pipt.item[stackX.item[i]].width + ITEM_GAP;
-                i = 0;
-            }
-        }
-        if (pipt.width < pipt.item[stackX.item[stackX.top]].x + pipt.item[stackX.item[stackX.top]].width + CANVAS_GAP) {
-            pipt.width = pipt.item[stackX.item[stackX.top]].x + pipt.item[stackX.item[stackX.top]].width + CANVAS_GAP;
-        }
-        StackPop(&stackX);
-    }
-}
-
-void PossitionItemsY() {
-    SetupStacks();
-    int currentY = CANVAS_GAP;
-    StackPush(&stackX, 0);
-    StackPush(&stackY, 0);
-    while (stackY.top >= 0) {
-        int connection = ValidConnectionY();
-
-        if (connection != -1) {
-            currentY += pipt.item[stackY.item[stackY.top]].height + ITEM_GAP;
-            StackPush(&stackX, pipt.item[stackY.item[stackY.top]].connected[connection]);
-            StackPush(&stackY, pipt.item[stackY.item[stackY.top]].connected[connection]);
-        }
-        else {
-            pipt.item[stackY.item[stackY.top]].y = currentY;
-            pipt.item[stackY.item[stackY.top]].x = CANVAS_GAP;
-            StackPop(&stackY);
-            currentY -= pipt.item[stackY.item[stackY.top]].height + ITEM_GAP;
-        }
-        if (pipt.height < pipt.item[stackY.item[stackY.top]].y + pipt.item[stackY.item[stackY.top]].height + CANVAS_GAP) {
-            pipt.height = pipt.item[stackY.item[stackY.top]].y + pipt.item[stackY.item[stackY.top]].height + CANVAS_GAP;
-        }
-    }
-    PossitionItemsX();
-}
-
-//==============================================================
-//  Canvas
-//==============================================================
-
-void SetupCanvas(char* canvas) {
-    for (int i = 0; i < pipt.width * pipt.height; i++) {
-        canvas[i] = BACKGROUND_CHAR;
-    }
-    for (int i = pipt.width - 1; i < pipt.width * pipt.height; i += pipt.width) {
-        canvas[i] = '\n';
-    }
-    canvas[(pipt.width * pipt.height) - 1] = '\0';
-}
-
-void DrawItem(char* canvas, const int i) {
-    for (int j = 0; j < pipt.item[i].width; j++) {
-        canvas[(pipt.item[i].y * pipt.width) + pipt.item[i].x + j] = pipt.item[i].top[j];
-    }
-    for (int j = 0; j < pipt.item[i].bodyLineCount; j++) {
-        for (int k = 0; k < pipt.item[i].width; k++) {
-            canvas[((pipt.item[i].y + j + 1) * pipt.width) + pipt.item[i].x + k] = pipt.item[i].body[j][k];
-        }
-    }
-    for (int j = 0; j < pipt.item[i].width; j++) {
-        canvas[((pipt.item[i].y + pipt.item[i].bodyLineCount + 1) * pipt.width) + pipt.item[i].x + j] = pipt.item[i].bottom[j];
-    }
-}
-
-void DrawCanvas() {
-    pipt.width += 1;
-    char canvas[pipt.width * pipt.height];
-    SetupCanvas(canvas);
-    for (int i = 0; i <= pipt.itemCount; i++) {
-        DrawItem(canvas, i);
-    }
-    printf("%s\n", canvas);
+void SizeItem(const int itemNumber) {
 }
 
 //==============================================================
@@ -333,9 +224,7 @@ int main(int argc, char* argv[]) {
 
     FormatItems();
 
-    PossitionItemsY();
-
-    DrawCanvas();
+    SizeItem(0);
 
     return 0;
 }
