@@ -27,7 +27,6 @@ struct item {
     int itemH;
     int totalW;
     int totalH;
-    int usedW;
     int x;
     int y;
     int connectionCount;
@@ -212,7 +211,7 @@ void SizeItem(const int itemNumber) {
 //  PossitionItems
 //==============================================================
 
-int PossitionItem(const int itemNumber, const int yOffset, const int xOffset) {
+int PossitionItem(const int itemNumber, const int yOffset, int xOffset) {
     pipt.item[itemNumber].y = yOffset;
     pipt.item[itemNumber].x = (pipt.item[itemNumber].totalW / 2) - (pipt.item[itemNumber].itemW / 2) + xOffset;
     for (int i = 0; i < pipt.item[itemNumber].connectionCount; i++) {
@@ -222,10 +221,9 @@ int PossitionItem(const int itemNumber, const int yOffset, const int xOffset) {
     }
     for (int i = 0; i < pipt.item[itemNumber].connectionCount; i++) {
         if (pipt.item[pipt.item[itemNumber].connected[i]].y == itemNumber * -1) {
-            pipt.item[itemNumber].usedW = PossitionItem(pipt.item[itemNumber].connected[i], yOffset + pipt.item[itemNumber].itemH + (ITEM_GAP * 2), pipt.item[itemNumber].usedW);
+            xOffset += PossitionItem(pipt.item[itemNumber].connected[i], yOffset + pipt.item[itemNumber].itemH + (ITEM_GAP * 2), xOffset); 
         }
     }
-    printf("x: %d, y: %d, iw: %d, ih: %d, tw: %d, th: %d, item: %s", pipt.item[itemNumber].x, pipt.item[itemNumber].y, pipt.item[itemNumber].itemW, pipt.item[itemNumber].itemH, pipt.item[itemNumber].totalW, pipt.item[itemNumber].totalH, pipt.item[itemNumber].title);
     return pipt.item[itemNumber].totalW;
 }
 
