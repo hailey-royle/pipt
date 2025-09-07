@@ -42,35 +42,6 @@ struct pipt {
 };
 struct pipt pipt;
 
-struct stack {
-    int top;
-    int capacity;
-    int item[MAX_ITEM_COUNT];
-};
-struct stack stackY;
-struct stack stackX;
-
-//==============================================================
-//  Stack
-//==============================================================
-
-void StackPush(struct stack* stack, int item){
-    if ((stack->capacity - stack->top) == 0) {
-        printf("stack overflow\n");
-        exit(1);
-    }
-    stack->top++;
-    stack->item[stack->top] = item;
-}
-
-void StackPop(struct stack* stack) {
-    if (stack->top < 0) {
-        printf("stack underflow\n");
-        exit(1);
-    }
-    stack->top--;
-}
-
 //==============================================================
 //  Input
 //==============================================================
