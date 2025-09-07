@@ -221,7 +221,7 @@ int PossitionItem(const int itemNumber, const int yOffset, int xOffset) {
     }
     for (int i = 0; i < pipt.item[itemNumber].connectionCount; i++) {
         if (pipt.item[pipt.item[itemNumber].connected[i]].y == itemNumber * -1) {
-            xOffset += PossitionItem(pipt.item[itemNumber].connected[i], yOffset + pipt.item[itemNumber].itemH + (ITEM_GAP * 2), xOffset); 
+            xOffset += PossitionItem(pipt.item[itemNumber].connected[i], yOffset + pipt.item[itemNumber].itemH + (ITEM_GAP * 2), xOffset);
         }
     }
     return pipt.item[itemNumber].totalW;
