@@ -184,11 +184,11 @@ void FormatItems() {
 void SizeItem(const int itemNumber) {
     for (int i = 0; i < pipt.item[itemNumber].connectionCount; i++) {
         if (pipt.item[pipt.item[itemNumber].connected[i]].totalW == 0) {
-            pipt.item[pipt.item[itemNumber].connected[i]].totalW = itemNumber * -1;
+            pipt.item[pipt.item[itemNumber].connected[i]].totalW = (itemNumber * -1) + 1;
         }
     }
     for (int i = 0; i < pipt.item[itemNumber].connectionCount; i++) {
-        if (pipt.item[pipt.item[itemNumber].connected[i]].totalW == itemNumber * -1) {
+        if (pipt.item[pipt.item[itemNumber].connected[i]].totalW == (itemNumber * -1) + 1) {
             SizeItem(pipt.item[itemNumber].connected[i]);
         }
     }
@@ -216,11 +216,11 @@ int PossitionItem(const int itemNumber, const int yOffset, int xOffset) {
     pipt.item[itemNumber].x = (pipt.item[itemNumber].totalW / 2) - (pipt.item[itemNumber].itemW / 2) + xOffset;
     for (int i = 0; i < pipt.item[itemNumber].connectionCount; i++) {
         if (pipt.item[pipt.item[itemNumber].connected[i]].y == 0) {
-            pipt.item[pipt.item[itemNumber].connected[i]].y = itemNumber * -1;
+            pipt.item[pipt.item[itemNumber].connected[i]].y = (itemNumber * -1) + 1;
         }
     }
     for (int i = 0; i < pipt.item[itemNumber].connectionCount; i++) {
-        if (pipt.item[pipt.item[itemNumber].connected[i]].y == itemNumber * -1) {
+        if (pipt.item[pipt.item[itemNumber].connected[i]].y == (itemNumber * -1) + 1) {
             xOffset += PossitionItem(pipt.item[itemNumber].connected[i], yOffset + pipt.item[itemNumber].itemH + (ITEM_GAP * 2), xOffset);
         }
     }
