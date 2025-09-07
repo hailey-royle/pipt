@@ -117,7 +117,7 @@ void LoadFileData(const char* arg) {
 void FindConnection(const int itemNumber, const int connectionNumber) {
     pipt.item[itemNumber].connection[connectionNumber][0] = TITLE_MARK;
     for (int i = 0; i <= pipt.itemCount; i++) {
-        if (strcmp(pipt.item[itemNumber].connection[connectionNumber], pipt.item[i].title) == 0) {
+        if (itemNumber != i && strcmp(pipt.item[itemNumber].connection[connectionNumber], pipt.item[i].title) == 0) {
             pipt.item[itemNumber].connected[connectionNumber] = i;
         }
     }
