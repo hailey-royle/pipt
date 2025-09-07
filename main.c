@@ -27,6 +27,7 @@ struct item {
     int itemH;
     int totalW;
     int totalH;
+    int usedW;
     int x;
     int y;
     int connectionCount;
@@ -36,6 +37,8 @@ struct item {
 struct pipt {
     struct item item[MAX_ITEM_COUNT];
     int itemCount;
+    int w;
+    int h;
 };
 struct pipt pipt;
 
@@ -209,38 +212,89 @@ void FormatItems() {
 //==============================================================
 
 void SizeItem(const int itemNumber) {
-    pipt.item[itemNumber].totalW = 1;
     for (int i = 0; i < pipt.item[itemNumber].connectionCount; i++) {
         if (pipt.item[pipt.item[itemNumber].connected[i]].totalW == 0) {
-            SizeItem(pipt.item[itemNumber].connected[i]);
+            pipt.item[pipt.item[itemNumber].connected[i]].totalW = itemNumber * -1;
         }
     }
     for (int i = 0; i < pipt.item[itemNumber].connectionCount; i++) {
+        if (pipt.item[pipt.item[itemNumber].connected[i]].totalW == itemNumber * -1) {
+            SizeItem(pipt.item[itemNumber].connected[i]);
+        }
+    }
+    pipt.item[itemNumber].totalW = 0;
+    for (int i = 0; i < pipt.item[itemNumber].connectionCount; i++) {
         pipt.item[itemNumber].totalW += pipt.item[pipt.item[itemNumber].connected[i]].totalW;
     }
-    pipt.item[itemNumber].totalW = pipt.item[itemNumber].itemW + (ITEM_GAP * 2);
+    if (pipt.item[itemNumber].totalW < pipt.item[itemNumber].itemW + (ITEM_GAP * 2)) {
+        pipt.item[itemNumber].totalW = pipt.item[itemNumber].itemW + (ITEM_GAP * 2); 
+    }
     for (int i = 0; i < pipt.item[itemNumber].connectionCount; i++) {
         if (pipt.item[itemNumber].totalH < pipt.item[pipt.item[itemNumber].connected[i]].totalH) {
             pipt.item[itemNumber].totalH = pipt.item[pipt.item[itemNumber].connected[i]].totalH;
         }
     }
     pipt.item[itemNumber].totalH += pipt.item[itemNumber].itemH + (ITEM_GAP * 2);
-
 }
 
 //==============================================================
 //  PossitionItems
 //==============================================================
 
-void PossitionItem(const int itemNumber, const int totalY) {
-    pipt.item[itemNumber].y = totalY + ITEM_GAP;
-    pipt.item[itemNumber].x = (pipt.item[itemNumber].totalW / 2) - (pipt.item[itemNumber].itemW / 2);
+int PossitionItem(const int itemNumber, const int yOffset, const int xOffset) {
+    pipt.item[itemNumber].y = yOffset;
+    pipt.item[itemNumber].x = (pipt.item[itemNumber].totalW / 2) - (pipt.item[itemNumber].itemW / 2) + xOffset;
     for (int i = 0; i < pipt.item[itemNumber].connectionCount; i++) {
-        if (pipt.item[pipt.item[itemNumber].connected[i]].x == 0) {
-            PossitionItem(pipt.item[itemNumber].connected[i], totalY + pipt.item[itemNumber].totalH);
+        if (pipt.item[pipt.item[itemNumber].connected[i]].y == 0) {
+            pipt.item[pipt.item[itemNumber].connected[i]].y = itemNumber * -1;
+        }
+    }
+    for (int i = 0; i < pipt.item[itemNumber].connectionCount; i++) {
+        if (pipt.item[pipt.item[itemNumber].connected[i]].y == itemNumber * -1) {
+            pipt.item[itemNumber].usedW = PossitionItem(pipt.item[itemNumber].connected[i], yOffset + pipt.item[itemNumber].itemH + (ITEM_GAP * 2), pipt.item[itemNumber].usedW);
         }
     }
     printf("x: %d, y: %d, iw: %d, ih: %d, tw: %d, th: %d, item: %s", pipt.item[itemNumber].x, pipt.item[itemNumber].y, pipt.item[itemNumber].itemW, pipt.item[itemNumber].itemH, pipt.item[itemNumber].totalW, pipt.item[itemNumber].totalH, pipt.item[itemNumber].title);
+    return pipt.item[itemNumber].totalW;
+}
+
+//==============================================================
+//  DrawCanvas
+//==============================================================
+
+void SetupCanvas(char* canvas) {
+    for (int i = 0; i < pipt.w * pipt.h; i++) {
+        canvas[i] = BACKGROUND_CHAR;
+    }
+    for (int i = pipt.w - 1; i < pipt.w * pipt.h; i += pipt.w) {
+        canvas[i] = '\n';
+    }
+    canvas[(pipt.w * pipt.h) - 1] = '\0';
+}
+
+void DrawItem(char* canvas, const int itemNumber) {
+    for (int i = 0; i < pipt.item[itemNumber].itemW; i++) {
+        canvas[(pipt.item[itemNumber].y * pipt.w) + pipt.item[itemNumber].x + ITEM_GAP + i] = pipt.item[itemNumber].top[i];
+    }
+    for (int j = 0; j < pipt.item[itemNumber].bodyLineCount; j++) {
+        for (int i = 0; i < pipt.item[itemNumber].itemW; i++) {
+            canvas[((pipt.item[itemNumber].y + j + 1) * pipt.w) + pipt.item[itemNumber].x + ITEM_GAP + i] = pipt.item[itemNumber].body[j][i];
+        }
+    }
+    for (int i = 0; i < pipt.item[itemNumber].itemW; i++) {
+        canvas[((pipt.item[itemNumber].y + pipt.item[itemNumber].bodyLineCount + 1) * pipt.w) + pipt.item[itemNumber].x + ITEM_GAP + i] = pipt.item[itemNumber].bottom[i];
+    }
+}
+
+void DrawCanvas() {
+    pipt.w = pipt.item[0].totalW + (CANVAS_GAP * 2) + 1;
+    pipt.h = pipt.item[0].totalH + (CANVAS_GAP * 2);
+    char canvas[pipt.w * pipt.h];
+    SetupCanvas(canvas);
+    for (int i = 0; i <= pipt.itemCount; i++) {
+        DrawItem(canvas, i);
+    }
+    printf("%s\n", canvas);
 }
 
 //==============================================================
@@ -258,7 +312,10 @@ int main(int argc, char* argv[]) {
 
     SizeItem(0);
 
-    PossitionItem(0, ITEM_GAP);
+    PossitionItem(0, (ITEM_GAP * 2), 0);
+
+    DrawCanvas();
 
     return 0;
+    //printf("x: %d, y: %d, iw: %d, ih: %d, tw: %d, th: %d, item: %s", pipt.item[itemNumber].x, pipt.item[itemNumber].y, pipt.item[itemNumber].itemW, pipt.item[itemNumber].itemH, pipt.item[itemNumber].totalW, pipt.item[itemNumber].totalH, pipt.item[itemNumber].title);
 }
