@@ -209,6 +209,24 @@ void FormatItems() {
 //==============================================================
 
 void SizeItem(const int itemNumber) {
+    pipt.item[itemNumber].totalW = 1;
+    for (int i = 0; i < pipt.item[itemNumber].connectionCount; i++) {
+        if (pipt.item[pipt.item[itemNumber].connected[i]].totalW == 0) {
+            SizeItem(pipt.item[itemNumber].connected[i]);
+        }
+    }
+    for (int i = 0; i < pipt.item[itemNumber].connectionCount; i++) {
+        pipt.item[itemNumber].totalW += pipt.item[pipt.item[itemNumber].connected[i]].totalW;
+    }
+    pipt.item[itemNumber].totalW = pipt.item[itemNumber].itemW + (ITEM_GAP * 2);
+    for (int i = 0; i < pipt.item[itemNumber].connectionCount; i++) {
+        if (pipt.item[itemNumber].totalH < pipt.item[pipt.item[itemNumber].connected[i]].totalH) {
+            pipt.item[itemNumber].totalH = pipt.item[pipt.item[itemNumber].connected[i]].totalH;
+        }
+    }
+    pipt.item[itemNumber].totalH += pipt.item[itemNumber].itemH + (ITEM_GAP * 2);
+
+    printf("iw: %d, ih: %d, tw: %d, th: %d, item: %s", pipt.item[itemNumber].itemW, pipt.item[itemNumber].itemH, pipt.item[itemNumber].totalW, pipt.item[itemNumber].totalH, pipt.item[itemNumber].title);
 }
 
 //==============================================================
