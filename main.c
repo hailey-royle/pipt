@@ -226,7 +226,21 @@ void SizeItem(const int itemNumber) {
     }
     pipt.item[itemNumber].totalH += pipt.item[itemNumber].itemH + (ITEM_GAP * 2);
 
-    printf("iw: %d, ih: %d, tw: %d, th: %d, item: %s", pipt.item[itemNumber].itemW, pipt.item[itemNumber].itemH, pipt.item[itemNumber].totalW, pipt.item[itemNumber].totalH, pipt.item[itemNumber].title);
+}
+
+//==============================================================
+//  PossitionItems
+//==============================================================
+
+void PossitionItem(const int itemNumber, const int totalY) {
+    pipt.item[itemNumber].y = totalY + ITEM_GAP;
+    pipt.item[itemNumber].x = (pipt.item[itemNumber].totalW / 2) - (pipt.item[itemNumber].itemW / 2);
+    for (int i = 0; i < pipt.item[itemNumber].connectionCount; i++) {
+        if (pipt.item[pipt.item[itemNumber].connected[i]].x == 0) {
+            PossitionItem(pipt.item[itemNumber].connected[i], totalY + pipt.item[itemNumber].totalH);
+        }
+    }
+    printf("x: %d, y: %d, iw: %d, ih: %d, tw: %d, th: %d, item: %s", pipt.item[itemNumber].x, pipt.item[itemNumber].y, pipt.item[itemNumber].itemW, pipt.item[itemNumber].itemH, pipt.item[itemNumber].totalW, pipt.item[itemNumber].totalH, pipt.item[itemNumber].title);
 }
 
 //==============================================================
@@ -243,6 +257,8 @@ int main(int argc, char* argv[]) {
     FormatItems();
 
     SizeItem(0);
+
+    PossitionItem(0, ITEM_GAP);
 
     return 0;
 }
